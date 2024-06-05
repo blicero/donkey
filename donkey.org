@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-05 18:00:55 krylon>
+# Time-stamp: <2024-06-05 19:29:22 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -20,4 +20,5 @@
 ** Diary
 ** Features [0/0]
 ** Components [0/0]
+*** Database [0/0]
 ** Bugs [0/0]
