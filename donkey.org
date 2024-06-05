@@ -1,0 +1,23 @@
+# -*- mode: org; fill-column: 78; -*-
+# Time-stamp: <2024-06-05 18:00:55 krylon>
+#
+#+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
+#+TAGS: web(w) database(d) javascript(j)
+#+TODO: TODO(t) IMPLEMENT(i) TEST(e) RESEARCH(r) | DONE(d)
+#+TODO: MEDITATE(m) PLANNING(p) REFINE(n) | FAILED(f) CANCELLED(c) SUSPENDED(s)
+#+TODO: EXPERIMENT(x) |
+#+PRIORITIES: A G D
+
+* Donkey
+  A simple-minded network monitoring application
+** Clocktable
+   #+BEGIN: clocktable :scope file :maxlevel 20
+   #+CAPTION: Clock summary at [2024-06-05 Mi 18:00]
+   | Headline     | Time   |
+   |--------------+--------|
+   | *Total time* | *0:00* |
+   #+END:
+** Diary
+** Features [0/0]
+** Components [0/0]
+** Bugs [0/0]
