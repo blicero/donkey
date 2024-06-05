@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 01. 02. 2021 by Benjamin Walkenhorst
 // (c) 2021 Benjamin Walkenhorst
-// Time-stamp: <2024-06-05 18:02:39 krylon>
+// Time-stamp: <2024-06-05 19:20:55 krylon>
 
 //go:build ignore
 // +build ignore
@@ -62,15 +62,22 @@ var candidates = map[string][]string{
 	"generate": []string{
 		"common",
 		"logdomain",
+		"database/query",
 	},
 	"test": []string{},
 	"vet": []string{
 		"common",
+		"database",
+		"database/query",
 		"logdomain",
+		"model",
 	},
 	"lint": []string{
 		"common",
+		"database",
+		"database/query",
 		"logdomain",
+		"model",
 	},
 }
 
@@ -204,6 +211,8 @@ This flag is not case-sensitive.`, strings.Join(orderedSteps, ", ")))
 			continue
 		} else if s == "build" || s == "clean" {
 			// clean is always done first, build is always done last
+			continue
+		} else if len(candidates[s]) == 0 {
 			continue
 		}
 
