@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-05 17:58:42 krylon>
+// Time-stamp: <2024-06-05 18:06:25 krylon>
 
 // Package common contains definitions used throughout the rest of the application.
 package common
@@ -37,13 +37,14 @@ import (
 const (
 	Debug                    = true
 	Version                  = "0.0.1"
-	AppName                  = "Mistwetter"
+	AppName                  = "Donkey"
 	TimestampFormat          = "2006-01-02 15:04:05"
 	TimestampFormatMinute    = "2006-01-02 15:04"
 	TimestampFormatSubSecond = "2006-01-02 15:04:05.0000 MST"
 	TimestampFormatDate      = "2006-01-02"
 	HeartBeat                = time.Millisecond * 500
 	RCTimeout                = time.Millisecond * 10
+	Port                     = 5102
 )
 
 // LogLevels are the names of the log levels supported by the logger.
