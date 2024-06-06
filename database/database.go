@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-05 19:17:57 krylon>
+// Time-stamp: <2024-06-06 18:52:35 krylon>
 
 package database
 
@@ -21,6 +21,7 @@ import (
 	"github.com/blicero/donkey/logdomain"
 	"github.com/blicero/donkey/model"
 	"github.com/blicero/krylib"
+	_ "github.com/mattn/go-sqlite3" // Import the database driver
 )
 
 var (
@@ -634,3 +635,105 @@ EXEC_QUERY:
 		return nil
 	}
 } // func (db *Database) HostAdd(h *model.Host) error
+
+// HostGetByID looks up a single Host by its ID.
+func (db *Database) HostGetByID(id krylib.ID) (*model.Host, error) {
+	const qid query.ID = query.HostGetByID
+	var (
+		err  error
+		msg  string
+		stmt *sql.Stmt
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid,
+			err.Error())
+		return nil, err
+	} else if db.tx != nil {
+		stmt = db.tx.Stmt(stmt)
+	}
+
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(id); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		}
+
+		return nil, err
+	}
+
+	defer rows.Close() // nolint: errcheck,gosec
+
+	if rows.Next() {
+		var host = &model.Host{ID: id}
+
+		if err = rows.Scan(&host.Name, &host.Address); err != nil {
+			msg = fmt.Sprintf("Error scanning row for Host %d: %s",
+				id,
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return nil, errors.New(msg)
+		}
+
+		return host, nil
+	}
+
+	db.log.Printf("[DEBUG] Host %d was not found in database.\n", id)
+
+	return nil, nil
+} // func (db *Database) HostGetByID(id krylib.ID) (*model.Host, error)
+
+// HostGetByName looks up a single Host by its name.
+func (db *Database) HostGetByName(name string) (*model.Host, error) {
+	const qid query.ID = query.HostGetByName
+	var (
+		err  error
+		msg  string
+		stmt *sql.Stmt
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid,
+			err.Error())
+		return nil, err
+	} else if db.tx != nil {
+		stmt = db.tx.Stmt(stmt)
+	}
+
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(name); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		}
+
+		return nil, err
+	}
+
+	defer rows.Close() // nolint: errcheck,gosec
+
+	if rows.Next() {
+		var host = &model.Host{Name: name}
+
+		if err = rows.Scan(&host.ID, &host.Address); err != nil {
+			msg = fmt.Sprintf("Error scanning row for Host %s: %s",
+				name,
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return nil, errors.New(msg)
+		}
+
+		return host, nil
+	}
+
+	db.log.Printf("[DEBUG] Host %s was not found in database.\n", name)
+
+	return nil, nil
+} // func (db *Database) HostGetByName(name string) (*model.Host, error)
