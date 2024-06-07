@@ -2,18 +2,19 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-05 18:23:28 krylon>
+// Time-stamp: <2024-06-06 20:30:12 krylon>
 
 package model
 
-import "fmt"
+import (
+	"time"
 
-type Load [3]float64
+	"github.com/blicero/krylib"
+)
 
-func (l Load) String() string {
-	return fmt.Sprintf("{%.1f / %.1f / %.1f}",
-		l[0],
-		l[1],
-		l[2],
-	)
-} // func (l Load) String() string
+type Load struct {
+	ID        krylib.ID
+	Timestamp time.Time
+	HostID    krylib.ID
+	Load      [3]float64
+}

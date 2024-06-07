@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-06 18:52:35 krylon>
+// Time-stamp: <2024-06-07 17:58:40 krylon>
 
 package database
 
@@ -600,14 +600,14 @@ func (db *Database) HostAdd(h *model.Host) error {
 	var rows *sql.Rows
 
 EXEC_QUERY:
-	if rows, err = stmt.Query(h.Name, h.Address); err != nil {
+	if rows, err = stmt.Query(h.Name, h.Addr); err != nil {
 		if worthARetry(err) {
 			waitForRetry()
 			goto EXEC_QUERY
 		} else {
 			err = fmt.Errorf("Cannot add Host %s/%s to database: %s",
 				h.Name,
-				h.Address,
+				h.Addr,
 				err.Error())
 			db.log.Printf("[ERROR] %s\n", err.Error())
 			return err
@@ -625,7 +625,7 @@ EXEC_QUERY:
 		} else if err = rows.Scan(&id); err != nil {
 			msg = fmt.Sprintf("Failed to get ID for newly added host %s/%s: %s",
 				h.Name,
-				h.Address,
+				h.Addr,
 				err.Error())
 			db.log.Printf("[ERROR] %s\n", msg)
 			return errors.New(msg)
@@ -671,7 +671,7 @@ EXEC_QUERY:
 	if rows.Next() {
 		var host = &model.Host{ID: id}
 
-		if err = rows.Scan(&host.Name, &host.Address); err != nil {
+		if err = rows.Scan(&host.Name, &host.Addr); err != nil {
 			msg = fmt.Sprintf("Error scanning row for Host %d: %s",
 				id,
 				err.Error())
@@ -722,7 +722,7 @@ EXEC_QUERY:
 	if rows.Next() {
 		var host = &model.Host{Name: name}
 
-		if err = rows.Scan(&host.ID, &host.Address); err != nil {
+		if err = rows.Scan(&host.ID, &host.Addr); err != nil {
 			msg = fmt.Sprintf("Error scanning row for Host %s: %s",
 				name,
 				err.Error())
@@ -737,3 +737,492 @@ EXEC_QUERY:
 
 	return nil, nil
 } // func (db *Database) HostGetByName(name string) (*model.Host, error)
+
+// HostGetByAddr looks up a single Host by its address.
+func (db *Database) HostGetByAddr(addr string) (*model.Host, error) {
+	const qid query.ID = query.HostGetByAddr
+	var (
+		err  error
+		msg  string
+		stmt *sql.Stmt
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid,
+			err.Error())
+		return nil, err
+	} else if db.tx != nil {
+		stmt = db.tx.Stmt(stmt)
+	}
+
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(addr); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		}
+
+		return nil, err
+	}
+
+	defer rows.Close() // nolint: errcheck,gosec
+
+	if rows.Next() {
+		var host = &model.Host{Addr: addr}
+
+		if err = rows.Scan(&host.ID, &host.Name); err != nil {
+			msg = fmt.Sprintf("Error scanning row for Host %s: %s",
+				addr,
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return nil, errors.New(msg)
+		}
+
+		return host, nil
+	}
+
+	db.log.Printf("[DEBUG] Host %s was not found in database.\n", addr)
+
+	return nil, nil
+} // func (db *Database) HostGetByAddr(name string) (*model.Host, error)
+
+// HostGetAll fetches *all* Hosts from the database.
+func (db *Database) HostGetAll() ([]model.Host, error) {
+	const qid query.ID = query.HostGetAll
+	var (
+		err  error
+		msg  string
+		stmt *sql.Stmt
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid,
+			err.Error())
+		return nil, err
+	} else if db.tx != nil {
+		stmt = db.tx.Stmt(stmt)
+	}
+
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		}
+
+		return nil, err
+	}
+
+	defer rows.Close() // nolint: errcheck,gosec
+	var hosts = make([]model.Host, 0, 16)
+
+	for rows.Next() {
+		var host model.Host
+
+		if err = rows.Scan(&host.ID, &host.Name, &host.Addr); err != nil {
+			msg = fmt.Sprintf("Error scanning row: %s",
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return nil, errors.New(msg)
+		}
+
+		hosts = append(hosts, host)
+	}
+
+	return hosts, nil
+} // func (db *Database) HostGetAll() ([]model.Host, error)
+
+// HostDelete deletes a single Host from the database.
+func (db *Database) HostDelete(id krylib.ID) error {
+	const qid query.ID = query.HostDelete
+	var (
+		err    error
+		msg    string
+		stmt   *sql.Stmt
+		tx     *sql.Tx
+		status bool
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid.String(),
+			err.Error())
+		return err
+	} else if db.tx != nil {
+		tx = db.tx
+	} else {
+	BEGIN_AD_HOC:
+		if tx, err = db.db.Begin(); err != nil {
+			if worthARetry(err) {
+				waitForRetry()
+				goto BEGIN_AD_HOC
+			} else {
+				msg = fmt.Sprintf("Error starting transaction: %s\n",
+					err.Error())
+				db.log.Printf("[ERROR] %s\n", msg)
+				return errors.New(msg)
+			}
+
+		} else {
+			defer func() {
+				var err2 error
+				if status {
+					if err2 = tx.Commit(); err2 != nil {
+						db.log.Printf("[ERROR] Failed to commit ad-hoc transaction: %s\n",
+							err2.Error())
+					}
+				} else if err2 = tx.Rollback(); err2 != nil {
+					db.log.Printf("[ERROR] Rollback of ad-hoc transaction failed: %s\n",
+						err2.Error())
+				}
+			}()
+		}
+	}
+
+	stmt = tx.Stmt(stmt)
+	var (
+		res         sql.Result
+		numAffected int64
+	)
+
+EXEC_QUERY:
+	if res, err = stmt.Exec(id); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		} else {
+			err = fmt.Errorf("Cannot delete Host %d from database: %s",
+				id,
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", err.Error())
+			return err
+		}
+	} else if numAffected, err = res.RowsAffected(); err != nil {
+		msg = fmt.Sprintf("Failed to query query result for number of affected rows: %s",
+			err.Error())
+		db.log.Printf("[ERROR] %s\n", msg)
+		return err
+	} else if numAffected != 1 {
+		db.log.Printf("[DEBUG] Failed to delete Host %d, no matching record found in database.\n",
+			id)
+	}
+
+	return nil
+} // func (db *Database) HostDelete(id krylib.ID) error
+
+// HostUpdateName updates a hosts's name.
+func (db *Database) HostUpdateName(h *model.Host, name string) error {
+	const qid query.ID = query.HostUpdateName
+	var (
+		err    error
+		msg    string
+		stmt   *sql.Stmt
+		tx     *sql.Tx
+		status bool
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid.String(),
+			err.Error())
+		return err
+	} else if db.tx != nil {
+		tx = db.tx
+	} else {
+	BEGIN_AD_HOC:
+		if tx, err = db.db.Begin(); err != nil {
+			if worthARetry(err) {
+				waitForRetry()
+				goto BEGIN_AD_HOC
+			} else {
+				msg = fmt.Sprintf("Error starting transaction: %s\n",
+					err.Error())
+				db.log.Printf("[ERROR] %s\n", msg)
+				return errors.New(msg)
+			}
+
+		} else {
+			defer func() {
+				var err2 error
+				if status {
+					if err2 = tx.Commit(); err2 != nil {
+						db.log.Printf("[ERROR] Failed to commit ad-hoc transaction: %s\n",
+							err2.Error())
+					}
+				} else if err2 = tx.Rollback(); err2 != nil {
+					db.log.Printf("[ERROR] Rollback of ad-hoc transaction failed: %s\n",
+						err2.Error())
+				}
+			}()
+		}
+	}
+
+	stmt = tx.Stmt(stmt)
+	var (
+		res         sql.Result
+		numAffected int64
+	)
+
+EXEC_QUERY:
+	if res, err = stmt.Exec(name, h.ID); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		} else {
+			err = fmt.Errorf("Cannot rename Host %d from %s to %s: %s",
+				h.ID,
+				h.Name,
+				name,
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", err.Error())
+			return err
+		}
+	} else if numAffected, err = res.RowsAffected(); err != nil {
+		msg = fmt.Sprintf("Failed to query query result for number of affected rows: %s",
+			err.Error())
+		db.log.Printf("[ERROR] %s\n", msg)
+		return err
+	} else if numAffected != 1 {
+		db.log.Printf("[DEBUG] Failed to rename Host %d (%s), no matching record found in database.\n",
+			h.ID,
+			h.Name)
+	} else {
+		h.Name = name
+	}
+
+	return nil
+} // func (db *Database) HostUpdateName(h *model.Host, name string) error
+
+// HostUpdateAddr updates a Host's IP address in the database.
+func (db *Database) HostUpdateAddr(h *model.Host, addr string) error {
+	const qid query.ID = query.HostUpdateAddr
+	var (
+		err    error
+		msg    string
+		stmt   *sql.Stmt
+		tx     *sql.Tx
+		status bool
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid.String(),
+			err.Error())
+		return err
+	} else if db.tx != nil {
+		tx = db.tx
+	} else {
+	BEGIN_AD_HOC:
+		if tx, err = db.db.Begin(); err != nil {
+			if worthARetry(err) {
+				waitForRetry()
+				goto BEGIN_AD_HOC
+			} else {
+				msg = fmt.Sprintf("Error starting transaction: %s\n",
+					err.Error())
+				db.log.Printf("[ERROR] %s\n", msg)
+				return errors.New(msg)
+			}
+
+		} else {
+			defer func() {
+				var err2 error
+				if status {
+					if err2 = tx.Commit(); err2 != nil {
+						db.log.Printf("[ERROR] Failed to commit ad-hoc transaction: %s\n",
+							err2.Error())
+					}
+				} else if err2 = tx.Rollback(); err2 != nil {
+					db.log.Printf("[ERROR] Rollback of ad-hoc transaction failed: %s\n",
+						err2.Error())
+				}
+			}()
+		}
+	}
+
+	stmt = tx.Stmt(stmt)
+	var (
+		res         sql.Result
+		numAffected int64
+	)
+
+EXEC_QUERY:
+	if res, err = stmt.Exec(addr, h.ID); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		} else {
+			err = fmt.Errorf("Cannot change address of Host %d from %s to %s: %s",
+				h.ID,
+				h.Addr,
+				addr,
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", err.Error())
+			return err
+		}
+	} else if numAffected, err = res.RowsAffected(); err != nil {
+		msg = fmt.Sprintf("Failed to query query result for number of affected rows: %s",
+			err.Error())
+		db.log.Printf("[ERROR] %s\n", msg)
+		return err
+	} else if numAffected != 1 {
+		db.log.Printf("[DEBUG] Failed to change address of Host %d from %s to %s, no matching record found in database.\n",
+			h.ID,
+			h.Addr,
+			addr)
+	} else {
+		h.Addr = addr
+	}
+
+	return nil
+} // func (db *Database) HostUpdateAddress(h *model.Host, addr string) error
+
+// LoadAdd adds a system load measurement to the database.
+func (db *Database) LoadAdd(l *model.Load) error {
+	const qid query.ID = query.LoadAdd
+	var (
+		err    error
+		msg    string
+		stmt   *sql.Stmt
+		tx     *sql.Tx
+		status bool
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid.String(),
+			err.Error())
+		return err
+	} else if db.tx != nil {
+		tx = db.tx
+	} else {
+	BEGIN_AD_HOC:
+		if tx, err = db.db.Begin(); err != nil {
+			if worthARetry(err) {
+				waitForRetry()
+				goto BEGIN_AD_HOC
+			} else {
+				msg = fmt.Sprintf("Error starting transaction: %s\n",
+					err.Error())
+				db.log.Printf("[ERROR] %s\n", msg)
+				return errors.New(msg)
+			}
+
+		} else {
+			defer func() {
+				var err2 error
+				if status {
+					if err2 = tx.Commit(); err2 != nil {
+						db.log.Printf("[ERROR] Failed to commit ad-hoc transaction: %s\n",
+							err2.Error())
+					}
+				} else if err2 = tx.Rollback(); err2 != nil {
+					db.log.Printf("[ERROR] Rollback of ad-hoc transaction failed: %s\n",
+						err2.Error())
+				}
+			}()
+		}
+	}
+
+	stmt = tx.Stmt(stmt)
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(l.HostID, l.Timestamp.Unix(), l.Load[0], l.Load[1], l.Load[2]); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		} else {
+			err = fmt.Errorf("Cannot add Load to database: %s",
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", err.Error())
+			return err
+		}
+	} else {
+		var id int64
+
+		defer rows.Close()
+
+		if !rows.Next() {
+			// CANTHAPPEN
+			db.log.Printf("[ERROR] Query %s did not return a value\n",
+				qid)
+			return fmt.Errorf("Query %s did not return a value", qid)
+		} else if err = rows.Scan(&id); err != nil {
+			msg = fmt.Sprintf("Failed to get ID for newly added Load data: %s",
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return errors.New(msg)
+		}
+
+		l.ID = krylib.ID(id)
+		return nil
+	}
+} // func (db *Database) LoadAdd(l *Load) error
+
+// LoadGetByHost fetches the up to <n> most recent Load values for the given Host.
+func (db *Database) LoadGetByHost(id krylib.ID, n int64) ([]model.Load, error) {
+	const qid query.ID = query.LoadGetByHost
+	var (
+		err  error
+		msg  string
+		stmt *sql.Stmt
+		cnt  int64
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid,
+			err.Error())
+		return nil, err
+	} else if db.tx != nil {
+		stmt = db.tx.Stmt(stmt)
+	}
+
+	var rows *sql.Rows
+
+	if n < 0 {
+		cnt = 16
+	} else {
+		cnt = n
+	}
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(id, n); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		}
+
+		return nil, err
+	}
+
+	defer rows.Close() // nolint: errcheck,gosec
+	var data = make([]model.Load, 0, cnt)
+
+	for rows.Next() {
+		var (
+			load  = model.Load{HostID: id}
+			stamp int64
+		)
+
+		if err = rows.Scan(&load.ID, &stamp, &load.Load[0], &load.Load[1], &load.Load[2]); err != nil {
+			msg = fmt.Sprintf("Error scanning row: %s",
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return nil, errors.New(msg)
+		}
+
+		load.Timestamp = time.Unix(stamp, 0)
+
+		data = append(data, load)
+	}
+
+	return data, nil
+} // func (db *Database) LoadGetByHost(id krylib.ID) ([]model.Load, error)

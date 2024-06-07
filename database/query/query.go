@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-05 18:46:16 krylon>
+// Time-stamp: <2024-06-06 19:50:23 krylon>
 
 //go:generate stringer -type=ID
 
@@ -20,7 +20,7 @@ const (
 	HostGetAll
 	HostDelete
 	HostUpdateName
-	HostUpdateAddress
+	HostUpdateAddr
 	LoadAdd
 	LoadGetByHost
 	LoadgetByPeriod
