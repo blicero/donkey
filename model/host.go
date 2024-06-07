@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-06 19:50:23 krylon>
+// Time-stamp: <2024-06-07 18:20:58 krylon>
 
 package model
 
@@ -12,4 +12,5 @@ type Host struct {
 	ID   krylib.ID
 	Name string
 	Addr string
+	OS   string
 }

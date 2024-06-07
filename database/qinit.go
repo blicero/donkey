@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-07 18:03:03 krylon>
+// Time-stamp: <2024-06-07 18:21:28 krylon>
 
 package database
 
@@ -12,6 +12,7 @@ CREATE TABLE host (
     id		INTEGER PRIMARY KEY,
     name	TEXT NOT NULL,
     addr	TEXT NOT NULL,
+    os          TEXT NOT NULL DEFAULT '',
     UNIQUE (name, addr),
     CHECK (name <> '' AND addr <> '')
 ) STRICT

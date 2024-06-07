@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-07 17:58:40 krylon>
+// Time-stamp: <2024-06-07 18:26:54 krylon>
 
 package database
 
@@ -600,7 +600,7 @@ func (db *Database) HostAdd(h *model.Host) error {
 	var rows *sql.Rows
 
 EXEC_QUERY:
-	if rows, err = stmt.Query(h.Name, h.Addr); err != nil {
+	if rows, err = stmt.Query(h.Name, h.Addr, h.OS); err != nil {
 		if worthARetry(err) {
 			waitForRetry()
 			goto EXEC_QUERY
@@ -671,7 +671,7 @@ EXEC_QUERY:
 	if rows.Next() {
 		var host = &model.Host{ID: id}
 
-		if err = rows.Scan(&host.Name, &host.Addr); err != nil {
+		if err = rows.Scan(&host.Name, &host.Addr, &host.OS); err != nil {
 			msg = fmt.Sprintf("Error scanning row for Host %d: %s",
 				id,
 				err.Error())
@@ -722,7 +722,7 @@ EXEC_QUERY:
 	if rows.Next() {
 		var host = &model.Host{Name: name}
 
-		if err = rows.Scan(&host.ID, &host.Addr); err != nil {
+		if err = rows.Scan(&host.ID, &host.Addr, &host.OS); err != nil {
 			msg = fmt.Sprintf("Error scanning row for Host %s: %s",
 				name,
 				err.Error())
@@ -773,7 +773,7 @@ EXEC_QUERY:
 	if rows.Next() {
 		var host = &model.Host{Addr: addr}
 
-		if err = rows.Scan(&host.ID, &host.Name); err != nil {
+		if err = rows.Scan(&host.ID, &host.Name, &host.OS); err != nil {
 			msg = fmt.Sprintf("Error scanning row for Host %s: %s",
 				addr,
 				err.Error())
@@ -825,7 +825,7 @@ EXEC_QUERY:
 	for rows.Next() {
 		var host model.Host
 
-		if err = rows.Scan(&host.ID, &host.Name, &host.Addr); err != nil {
+		if err = rows.Scan(&host.ID, &host.Name, &host.Addr, &host.OS); err != nil {
 			msg = fmt.Sprintf("Error scanning row: %s",
 				err.Error())
 			db.log.Printf("[ERROR] %s\n", msg)
@@ -1082,6 +1082,89 @@ EXEC_QUERY:
 
 	return nil
 } // func (db *Database) HostUpdateAddress(h *model.Host, addr string) error
+
+func (db *Database) HostUpdateOS(h *model.Host, os string) error {
+	const qid query.ID = query.HostUpdateOS
+	var (
+		err    error
+		msg    string
+		stmt   *sql.Stmt
+		tx     *sql.Tx
+		status bool
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid.String(),
+			err.Error())
+		return err
+	} else if db.tx != nil {
+		tx = db.tx
+	} else {
+	BEGIN_AD_HOC:
+		if tx, err = db.db.Begin(); err != nil {
+			if worthARetry(err) {
+				waitForRetry()
+				goto BEGIN_AD_HOC
+			} else {
+				msg = fmt.Sprintf("Error starting transaction: %s\n",
+					err.Error())
+				db.log.Printf("[ERROR] %s\n", msg)
+				return errors.New(msg)
+			}
+
+		} else {
+			defer func() {
+				var err2 error
+				if status {
+					if err2 = tx.Commit(); err2 != nil {
+						db.log.Printf("[ERROR] Failed to commit ad-hoc transaction: %s\n",
+							err2.Error())
+					}
+				} else if err2 = tx.Rollback(); err2 != nil {
+					db.log.Printf("[ERROR] Rollback of ad-hoc transaction failed: %s\n",
+						err2.Error())
+				}
+			}()
+		}
+	}
+
+	stmt = tx.Stmt(stmt)
+	var (
+		res         sql.Result
+		numAffected int64
+	)
+
+EXEC_QUERY:
+	if res, err = stmt.Exec(os, h.ID); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		} else {
+			err = fmt.Errorf("Cannot change OS of Host %d from %s to %s: %s",
+				h.ID,
+				h.OS,
+				os,
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", err.Error())
+			return err
+		}
+	} else if numAffected, err = res.RowsAffected(); err != nil {
+		msg = fmt.Sprintf("Failed to query query result for number of affected rows: %s",
+			err.Error())
+		db.log.Printf("[ERROR] %s\n", msg)
+		return err
+	} else if numAffected != 1 {
+		db.log.Printf("[DEBUG] Failed to change OS of Host %d from %s to %s, no matching record found in database.\n",
+			h.ID,
+			h.OS,
+			os)
+	} else {
+		h.OS = os
+	}
+
+	return nil
+} // func (db *Database) HostUpdateOS(h *model.Host, os string) error
 
 // LoadAdd adds a system load measurement to the database.
 func (db *Database) LoadAdd(l *model.Load) error {
