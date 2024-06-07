@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-05 19:29:22 krylon>
+# Time-stamp: <2024-06-07 18:09:07 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,13 +12,21 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-05 Mi 18:00]
-   | Headline     | Time   |
-   |--------------+--------|
-   | *Total time* | *0:00* |
+   #+CAPTION: Clock summary at [2024-06-07 Fr 18:09]
+   | Headline             | Time   |      |      |
+   |----------------------+--------+------+------|
+   | *Total time*         | *2:30* |      |      |
+   |----------------------+--------+------+------|
+   | Donkey               | 2:30   |      |      |
+   | \_  Components [0/0] |        | 2:30 |      |
+   | \_    Database [0/0] |        |      | 2:30 |
    #+END:
 ** Diary
 ** Features [0/0]
 ** Components [0/0]
 *** Database [0/0]
+    :LOGBOOK:
+    CLOCK: [2024-06-07 Fr 17:49]--[2024-06-07 Fr 18:09] =>  0:20
+    CLOCK: [2024-06-06 Do 18:39]--[2024-06-06 Do 20:49] =>  2:10
+    :END:
 ** Bugs [0/0]
