@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-07 18:22:15 krylon>
+// Time-stamp: <2024-06-10 19:30:34 krylon>
 
 //go:generate stringer -type=ID
 
@@ -22,6 +22,7 @@ const (
 	HostUpdateName
 	HostUpdateAddr
 	HostUpdateOS
+	HostUpdateLastContact
 	LoadAdd
 	LoadGetByHost
 	LoadgetByPeriod

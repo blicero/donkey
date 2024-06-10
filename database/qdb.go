@@ -2,22 +2,23 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-07 18:22:31 krylon>
+// Time-stamp: <2024-06-10 19:58:31 krylon>
 
 package database
 
 import "github.com/blicero/donkey/database/query"
 
 var qDB = map[query.ID]string{
-	query.HostAdd:        "INSERT INTO host (name, addr, os) VALUES (?, ?, ?) RETURNING id",
-	query.HostGetByID:    "SELECT name, addr, os FROM host WHERE id = ?",
-	query.HostGetByAddr:  "SELECT id, name, os FROM host WHERE addr = ?",
-	query.HostGetByName:  "SELECT id, addr, os FROM host WHERE name = ?",
-	query.HostGetAll:     "SELECT id, name, addr, os FROM host",
-	query.HostDelete:     "DELETE FROM host WHERE id = ?",
-	query.HostUpdateName: "UPDATE host SET name = ? WHERE id = ?",
-	query.HostUpdateAddr: "UPDATE host SET addr = ? WHERE id = ?",
-	query.HostUpdateOS:   "UPDATE host SET os = ? WHERE id = ?",
+	query.HostAdd:               "INSERT INTO host (name, addr, os) VALUES (?, ?, ?) RETURNING id",
+	query.HostGetByID:           "SELECT name, addr, os, last_contact FROM host WHERE id = ?",
+	query.HostGetByAddr:         "SELECT id, name, os, last_contact FROM host WHERE addr = ?",
+	query.HostGetByName:         "SELECT id, addr, os, last_contact FROM host WHERE name = ?",
+	query.HostGetAll:            "SELECT id, name, addr, os, last_contact FROM host",
+	query.HostDelete:            "DELETE FROM host WHERE id = ?",
+	query.HostUpdateName:        "UPDATE host SET name = ? WHERE id = ?",
+	query.HostUpdateAddr:        "UPDATE host SET addr = ? WHERE id = ?",
+	query.HostUpdateOS:          "UPDATE host SET os = ? WHERE id = ?",
+	query.HostUpdateLastContact: "UPDATE host SET last_contact = ? WHERE id = ?",
 	query.LoadAdd: `
 INSERT INTO load (host_id, timestamp, load1, load5, load15)
           VALUES (      ?,         ?,     ?,     ?,      ?)

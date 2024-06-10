@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-07 18:21:28 krylon>
+// Time-stamp: <2024-06-10 19:29:45 krylon>
 
 package database
 
@@ -13,12 +13,14 @@ CREATE TABLE host (
     name	TEXT NOT NULL,
     addr	TEXT NOT NULL,
     os          TEXT NOT NULL DEFAULT '',
+    last_contact INTEGER NOT NULL DEFAULT 0,
     UNIQUE (name, addr),
     CHECK (name <> '' AND addr <> '')
 ) STRICT
 `,
 	"CREATE INDEX host_addr_idx ON host (addr)",
 	"CREATE INDEX host_name_idx ON host (name)",
+	"CREATE INDEX host_contact_idx ON host (last_contact)",
 
 	`
 CREATE TABLE load (

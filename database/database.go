@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-07 18:40:46 krylon>
+// Time-stamp: <2024-06-10 20:10:43 krylon>
 
 package database
 
@@ -669,15 +669,20 @@ EXEC_QUERY:
 	defer rows.Close() // nolint: errcheck,gosec
 
 	if rows.Next() {
-		var host = &model.Host{ID: id}
+		var (
+			timestamp int64
+			host      = &model.Host{ID: id}
+		)
 
-		if err = rows.Scan(&host.Name, &host.Addr, &host.OS); err != nil {
+		if err = rows.Scan(&host.Name, &host.Addr, &host.OS, &timestamp); err != nil {
 			msg = fmt.Sprintf("Error scanning row for Host %d: %s",
 				id,
 				err.Error())
 			db.log.Printf("[ERROR] %s\n", msg)
 			return nil, errors.New(msg)
 		}
+
+		host.LastContact = time.Unix(timestamp, 0)
 
 		return host, nil
 	}
@@ -720,15 +725,20 @@ EXEC_QUERY:
 	defer rows.Close() // nolint: errcheck,gosec
 
 	if rows.Next() {
-		var host = &model.Host{Name: name}
+		var (
+			stamp int64
+			host  = &model.Host{Name: name}
+		)
 
-		if err = rows.Scan(&host.ID, &host.Addr, &host.OS); err != nil {
+		if err = rows.Scan(&host.ID, &host.Addr, &host.OS, &stamp); err != nil {
 			msg = fmt.Sprintf("Error scanning row for Host %s: %s",
 				name,
 				err.Error())
 			db.log.Printf("[ERROR] %s\n", msg)
 			return nil, errors.New(msg)
 		}
+
+		host.LastContact = time.Unix(stamp, 0)
 
 		return host, nil
 	}
@@ -771,15 +781,20 @@ EXEC_QUERY:
 	defer rows.Close() // nolint: errcheck,gosec
 
 	if rows.Next() {
-		var host = &model.Host{Addr: addr}
+		var (
+			stamp int64
+			host  = &model.Host{Addr: addr}
+		)
 
-		if err = rows.Scan(&host.ID, &host.Name, &host.OS); err != nil {
+		if err = rows.Scan(&host.ID, &host.Name, &host.OS, &stamp); err != nil {
 			msg = fmt.Sprintf("Error scanning row for Host %s: %s",
 				addr,
 				err.Error())
 			db.log.Printf("[ERROR] %s\n", msg)
 			return nil, errors.New(msg)
 		}
+
+		host.LastContact = time.Unix(stamp, 0)
 
 		return host, nil
 	}
@@ -823,15 +838,19 @@ EXEC_QUERY:
 	var hosts = make([]model.Host, 0, 16)
 
 	for rows.Next() {
-		var host model.Host
+		var (
+			stamp int64
+			host  model.Host
+		)
 
-		if err = rows.Scan(&host.ID, &host.Name, &host.Addr, &host.OS); err != nil {
+		if err = rows.Scan(&host.ID, &host.Name, &host.Addr, &host.OS, &stamp); err != nil {
 			msg = fmt.Sprintf("Error scanning row: %s",
 				err.Error())
 			db.log.Printf("[ERROR] %s\n", msg)
 			return nil, errors.New(msg)
 		}
 
+		host.LastContact = time.Unix(stamp, 0)
 		hosts = append(hosts, host)
 	}
 
@@ -1166,6 +1185,90 @@ EXEC_QUERY:
 
 	return nil
 } // func (db *Database) HostUpdateOS(h *model.Host, os string) error
+
+// HostUpdateLastContact updates the LastContact timestamp on a host's database record.
+func (db *Database) HostUpdateLastContact(h *model.Host, stamp time.Time) error {
+	const qid query.ID = query.HostUpdateLastContact
+	var (
+		err    error
+		msg    string
+		stmt   *sql.Stmt
+		tx     *sql.Tx
+		status bool
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid.String(),
+			err.Error())
+		return err
+	} else if db.tx != nil {
+		tx = db.tx
+	} else {
+	BEGIN_AD_HOC:
+		if tx, err = db.db.Begin(); err != nil {
+			if worthARetry(err) {
+				waitForRetry()
+				goto BEGIN_AD_HOC
+			} else {
+				msg = fmt.Sprintf("Error starting transaction: %s\n",
+					err.Error())
+				db.log.Printf("[ERROR] %s\n", msg)
+				return errors.New(msg)
+			}
+
+		} else {
+			defer func() {
+				var err2 error
+				if status {
+					if err2 = tx.Commit(); err2 != nil {
+						db.log.Printf("[ERROR] Failed to commit ad-hoc transaction: %s\n",
+							err2.Error())
+					}
+				} else if err2 = tx.Rollback(); err2 != nil {
+					db.log.Printf("[ERROR] Rollback of ad-hoc transaction failed: %s\n",
+						err2.Error())
+				}
+			}()
+		}
+	}
+
+	stmt = tx.Stmt(stmt)
+	var (
+		res         sql.Result
+		numAffected int64
+	)
+
+EXEC_QUERY:
+	if res, err = stmt.Exec(stamp.Unix(), h.ID); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		} else {
+			err = fmt.Errorf("Cannot change Timestamp of Host %d from %s to %s: %s",
+				h.ID,
+				h.LastContact.Format(common.TimestampFormat),
+				stamp.Format(common.TimestampFormat),
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", err.Error())
+			return err
+		}
+	} else if numAffected, err = res.RowsAffected(); err != nil {
+		msg = fmt.Sprintf("Failed to query query result for number of affected rows: %s",
+			err.Error())
+		db.log.Printf("[ERROR] %s\n", msg)
+		return err
+	} else if numAffected != 1 {
+		db.log.Printf("[DEBUG] Failed to change Timestamp of Host %d from %s to %s, no matching record found in database.\n",
+			h.ID,
+			h.LastContact.Format(common.TimestampFormat),
+			stamp.Format(common.TimestampFormat))
+	} else {
+		h.LastContact = stamp
+	}
+
+	return nil
+} // func (db *Database) HostUpdateLastContact(h *model.Host, stamp time.Time) error
 
 // LoadAdd adds a system load measurement to the database.
 func (db *Database) LoadAdd(l *model.Load) error {
