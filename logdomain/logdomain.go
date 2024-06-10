@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-05 17:58:31 krylon>
+// Time-stamp: <2024-06-07 18:38:22 krylon>
 
 package logdomain
 
@@ -15,6 +15,7 @@ type ID uint8
 const (
 	Common ID = iota
 	Client
+	DBPool
 	Database
 	Server
 )
@@ -24,6 +25,7 @@ func AllDomains() []ID {
 	return []ID{
 		Common,
 		Client,
+		DBPool,
 		Database,
 		Server,
 	}
