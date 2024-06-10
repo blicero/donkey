@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-05 18:06:25 krylon>
+// Time-stamp: <2024-06-09 17:44:23 krylon>
 
 // Package common contains definitions used throughout the rest of the application.
 package common
@@ -15,6 +15,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -63,6 +64,10 @@ var LogLevels = []logutils.LogLevel{
 var PackageLevels = make(map[logdomain.ID]logutils.LogLevel, len(LogLevels))
 
 const MinLogLevel = "TRACE"
+
+// SuffixPattern is a regular expression that matches the suffix of a file name.
+// For "text.txt", it should match ".txt" and capture "txt".
+var SuffixPattern = regexp.MustCompile("([.][^.]+)$")
 
 func init() {
 	for _, id := range logdomain.AllDomains() {
