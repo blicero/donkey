@@ -1,11 +1,11 @@
 {{ define "head" }}
-{{/* Time-stamp: <2022-10-11 15:25:43 krylon> */}}
+{{/* Time-stamp: <2024-06-10 19:12:10 krylon> */}}
 <head>
   <title>{{ app_string }}@{{ hostname  }} - {{ .Title }}</title>
   
   <meta charset="utf-8">
 
-  <script src="/static/jquery-3.6.0.min.js"></script>
+  <script src="/static/jquery-3.7.1.min.js"></script>
   <script src="/static/bootstrap.bundle.min.js"></script>
   <script src="/static/underscore.js"></script>
   <script src="/static/sha512.min.js"></script>
@@ -44,19 +44,6 @@
        hide_boring_items();
      }
    });
-
-   {{/*
-   const clusterList = {
-     {{ range .AllClusters }}
-     "{{ js .Name }}": {
-       ID:                      {{ .ID }},
-       Name:                    "{{ js .Name }}",
-       Description:             "{{ js .Description }}",
-       Timestamp:               "Date.parse({{ fmt_time .Timestamp }}) / 1000",
-     },
-     {{ end }}
-   };
-   */}}
   </script>
 
   <link rel="stylesheet" type="text/css" href="/static/style.css" />

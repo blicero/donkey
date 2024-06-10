@@ -1,4 +1,4 @@
-// Time-stamp: <2021-02-22 18:13:15 krylon>
+// Time-stamp: <2024-06-10 19:04:43 krylon>
 // -*- mode: javascript; coding: utf-8; -*-
 // Copyright 2020 Benjamin Walkenhorst <krylon@gmx.net>
 
@@ -16,10 +16,6 @@ var settings = {
         "maxShow": 25,
     },
 
-    "items": {
-        "hideboring": false,
-        "page": 50,
-    },
 };
 
 function initSettings() {
@@ -48,14 +44,6 @@ function initSettings() {
     item = JSON.parse(localStorage.getItem("messages.maxShow"));
     if (Number.isInteger(item)) {
         settings.messages.maxShow = item;
-    }
-
-    settings.items.hideboring =
-        JSON.parse(localStorage.getItem("items.hideboring")) ? true : false;
-
-    item = JSON.parse(localStorage.getItem("items.page"));
-    if (Number.isInteger(item)) {
-        settings.items.page = item;
     }
 } // function initSettings()
 
