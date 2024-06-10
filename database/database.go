@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-07 18:26:54 krylon>
+// Time-stamp: <2024-06-07 18:40:46 krylon>
 
 package database
 
@@ -1083,6 +1083,7 @@ EXEC_QUERY:
 	return nil
 } // func (db *Database) HostUpdateAddress(h *model.Host, addr string) error
 
+// HostUpdateOS updates a Host's OS field.
 func (db *Database) HostUpdateOS(h *model.Host, os string) error {
 	const qid query.ID = query.HostUpdateOS
 	var (
