@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 01. 02. 2021 by Benjamin Walkenhorst
 // (c) 2021 Benjamin Walkenhorst
-// Time-stamp: <2024-06-09 17:42:34 krylon>
+// Time-stamp: <2024-06-11 18:45:46 krylon>
 
 //go:build ignore
 // +build ignore
@@ -59,27 +59,33 @@ var orderedSteps = []string{
 }
 
 var candidates = map[string][]string{
-	"generate": []string{
+	"generate": {
 		"common",
 		"logdomain",
 		"database/query",
+		"agent/platform",
 	},
-	"test": []string{
+	"test": {
+		"agent",
 		"database",
 	},
-	"vet": []string{
+	"vet": {
 		"common",
+		"logdomain",
+		"agent",
+		"agent/platform",
 		"database",
 		"database/query",
-		"logdomain",
 		"model",
 		"server",
 	},
-	"lint": []string{
+	"lint": {
 		"common",
+		"logdomain",
+		"agent",
+		"agent/platform",
 		"database",
 		"database/query",
-		"logdomain",
 		"model",
 		"server",
 	},

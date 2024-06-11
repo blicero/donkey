@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-09 17:44:23 krylon>
+// Time-stamp: <2024-06-11 18:33:37 krylon>
 
 // Package common contains definitions used throughout the rest of the application.
 package common
@@ -83,9 +83,10 @@ func init() {
 // XfrDbgPath is the path of the folder where data on DNS zone transfers
 // are stored.
 var (
-	BaseDir = filepath.Join(os.Getenv("HOME"), fmt.Sprintf("%s.d", strings.ToLower(AppName)))
-	LogPath = filepath.Join(BaseDir, fmt.Sprintf("%s.log", strings.ToLower(AppName)))
-	DbPath  = filepath.Join(BaseDir, fmt.Sprintf("%s.db", strings.ToLower(AppName)))
+	BaseDir       = filepath.Join(os.Getenv("HOME"), fmt.Sprintf("%s.d", strings.ToLower(AppName)))
+	LogPath       = filepath.Join(BaseDir, fmt.Sprintf("%s.log", strings.ToLower(AppName)))
+	DbPath        = filepath.Join(BaseDir, fmt.Sprintf("%s.db", strings.ToLower(AppName)))
+	AgentConfPath = filepath.Join(BaseDir, "agent.json")
 )
 
 // SetBaseDir sets the BaseDir and related variables.
@@ -95,6 +96,7 @@ func SetBaseDir(path string) error {
 	BaseDir = path
 	LogPath = filepath.Join(BaseDir, fmt.Sprintf("%s.log", strings.ToLower(AppName)))
 	DbPath = filepath.Join(BaseDir, fmt.Sprintf("%s.db", strings.ToLower(AppName)))
+	AgentConfPath = filepath.Join(BaseDir, "agent.json")
 
 	if err := InitApp(); err != nil {
 		fmt.Printf("Error initializing application environment: %s\n", err.Error())
