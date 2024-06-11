@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 11. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-11 19:37:41 krylon>
+// Time-stamp: <2024-06-11 23:19:47 krylon>
 
 // Package agent implements the client side of the application.
 package agent
@@ -10,8 +10,10 @@ package agent
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -79,6 +81,9 @@ func (ag *Agent) readConfig() error {
 	)
 
 	if fh, err = os.Open(common.AgentConfPath); err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+
+		}
 		ag.log.Printf("[ERROR] Cannot open agent config %s: %s\n",
 			common.AgentConfPath,
 			err.Error())
