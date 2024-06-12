@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 10. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-11 18:22:59 krylon>
+// Time-stamp: <2024-06-12 20:57:47 krylon>
 //
 // Code to handle interactions with Clients, i.e. the web service interface
 
@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/blicero/donkey/database"
@@ -37,7 +38,7 @@ func (srv *Server) handleClientRegister(w http.ResponseWriter, r *http.Request) 
 		body         []byte
 		host, dbhost *model.Host
 		msg          string
-		res          response
+		res          model.Response
 	)
 
 	if _, err = io.Copy(&buf, r.Body); err != nil {
@@ -81,6 +82,7 @@ func (srv *Server) handleClientRegister(w http.ResponseWriter, r *http.Request) 
 	}
 
 	res.Status = true
+	res.Message = strconv.Itoa(int(host.ID))
 
 SEND_RESPONSE:
 	res.Timestamp = time.Now()
@@ -111,7 +113,7 @@ func (srv *Server) handleClientReportLoad(w http.ResponseWriter, r *http.Request
 		db      *database.Database
 		msg     string
 		buf     bytes.Buffer
-		res     response
+		res     model.Response
 		payload model.Load
 		host    *model.Host
 		name    string
