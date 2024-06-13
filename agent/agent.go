@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 11. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-12 21:40:49 krylon>
+// Time-stamp: <2024-06-13 18:25:48 krylon>
 
 // Package agent implements the client side of the application.
 package agent
@@ -116,6 +116,42 @@ func (ag *Agent) readConfig() error {
 	return nil
 } // func (ag *Agent) readConfig() error
 
+func (ag *Agent) writeConfig() error {
+	var (
+		err error
+		cfg config
+		buf []byte
+		fh  *os.File
+	)
+
+	cfg = config{
+		Server: ag.server,
+		HostID: int64(ag.hostID),
+	}
+
+	if buf, err = json.Marshal(&cfg); err != nil {
+		ag.log.Printf("[ERROR] Failed to serialize config: %s\n",
+			err.Error())
+		return err
+	} else if fh, err = os.Create(common.AgentConfPath); err != nil {
+		ag.log.Printf("[ERROR] Failed to open agent config file at %s: %s\n",
+			common.AgentConfPath,
+			err.Error())
+		return err
+	}
+
+	defer fh.Close()
+
+	if _, err = fh.Write(buf); err != nil {
+		ag.log.Printf("[ERROR] Cannot open agent config at %s for writing: %s\n",
+			common.AgentConfPath,
+			err.Error())
+		return err
+	}
+
+	return nil
+} // func (ag *Agent) writeConfig() error
+
 // Run executes the Agent's main loop.
 func (ag *Agent) Run() {
 	ag.log.Printf("[INFO] Agent starting up.\n")
@@ -165,9 +201,7 @@ func (ag *Agent) register() error {
 		ag.log.Printf("[ERROR] Failed to serialize Host payload: %s\n",
 			err.Error())
 		return err
-	}
-
-	if req, err = http.NewRequest("POST", addr, bytes.NewBuffer(serialized)); err != nil {
+	} else if req, err = http.NewRequest("POST", addr, bytes.NewBuffer(serialized)); err != nil {
 		ag.log.Printf("[ERROR] Failed to create HTTP request to for %s: %s\n",
 			addr,
 			err.Error())
@@ -209,6 +243,12 @@ func (ag *Agent) register() error {
 	ag.hostID = krylib.ID(id)
 
 	// I should write the config file at this point.
+	if err = ag.writeConfig(); err != nil {
+		ag.log.Printf("[ERROR] Cannot save config to %s: %s\n",
+			common.AgentConfPath,
+			err.Error())
+		return err
+	}
 
 	return nil
 } // func (ag *Agent) register() error
