@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 11. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-13 18:25:48 krylon>
+// Time-stamp: <2024-06-14 22:12:25 krylon>
 
 // Package agent implements the client side of the application.
 package agent
@@ -17,13 +17,20 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"strconv"
 	"sync/atomic"
+	"syscall"
+	"time"
 
 	"github.com/blicero/donkey/common"
 	"github.com/blicero/donkey/logdomain"
 	"github.com/blicero/donkey/model"
 	"github.com/blicero/krylib"
+)
+
+const (
+	heartbeat = time.Millisecond * 2500
 )
 
 type config struct {
@@ -33,13 +40,15 @@ type config struct {
 
 // Agent wraps the state of the client.
 type Agent struct {
-	server string
-	hostID krylib.ID
-	name   string
-	active atomic.Bool
-	log    *log.Logger
-	client http.Client // nolint: unused,deadcode
-	os     string
+	server  string
+	hostID  krylib.ID
+	name    string
+	active  atomic.Bool
+	log     *log.Logger
+	client  http.Client // nolint: unused,deadcode
+	os      string
+	recordq chan model.Record
+	sigq    chan os.Signal
 }
 
 // Create creates a new Agent.
@@ -68,6 +77,11 @@ func Create(srv string) (*Agent, error) {
 			err.Error())
 		return nil, err
 	}
+
+	ag.recordq = make(chan model.Record, 5)
+	ag.sigq = make(chan os.Signal, 2)
+
+	signal.Notify(ag.sigq, os.Interrupt, syscall.SIGPIPE, syscall.SIGTERM)
 
 	ag.log.Printf("[DEBUG] Agent coming up on %s, running %s %s\n",
 		ag.name,
@@ -159,7 +173,10 @@ func (ag *Agent) Run() {
 	defer ag.active.Store(false)
 
 	var (
-		err error
+		err    error
+		rec    model.Record
+		sig    os.Signal
+		ticker *time.Ticker
 	)
 
 	if ag.hostID == 0 {
@@ -171,9 +188,19 @@ func (ag *Agent) Run() {
 		}
 	}
 
-	// for {
+	ticker = time.NewTicker(heartbeat)
+	defer ticker.Stop()
 
-	// }
+	for ag.active.Load() {
+		select {
+		case <-ticker.C:
+			continue
+		case rec = <-ag.recordq:
+			// Do something
+		case sig = <-ag.sigq:
+			return
+		}
+	}
 } // func (ag *Agent) Run()
 
 func (ag *Agent) register() error {
