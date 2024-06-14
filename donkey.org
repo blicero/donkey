@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-13 22:22:40 krylon>
+# Time-stamp: <2024-06-14 23:33:26 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,17 +12,17 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-13 Do 22:22]
-   | Headline                 | Time    |       |      |      |
-   |--------------------------+---------+-------+------+------|
-   | *Total time*             | *23:04* |       |      |      |
-   |--------------------------+---------+-------+------+------|
-   | Donkey                   | 23:04   |       |      |      |
-   | \_  Components [0/0]     |         | 23:04 |      |      |
-   | \_    Database [0/0]     |         |       | 4:45 |      |
-   | \_    Server [0/0]       |         |       | 9:16 |      |
-   | \_      Webservice [0/0] |         |       |      | 3:07 |
-   | \_    Agent [0/0]        |         |       | 9:03 |      |
+   #+CAPTION: Clock summary at [2024-06-14 Fr 23:33]
+   | Headline                 | Time      |         |       |      |
+   |--------------------------+-----------+---------+-------+------|
+   | *Total time*             | *1d 1:27* |         |       |      |
+   |--------------------------+-----------+---------+-------+------|
+   | Donkey                   | 1d 1:27   |         |       |      |
+   | \_  Components [0/0]     |           | 1d 1:27 |       |      |
+   | \_    Database [0/0]     |           |         |  4:45 |      |
+   | \_    Server [0/0]       |           |         |  9:16 |      |
+   | \_      Webservice [0/0] |           |         |       | 3:07 |
+   | \_    Agent [0/0]        |           |         | 11:26 |      |
    #+END:
 ** Diary
 ** Features [0/0]
@@ -75,6 +75,7 @@
     :VISIBILITY: children
     :END:
     :LOGBOOK:
+    CLOCK: [2024-06-14 Fr 21:10]--[2024-06-14 Fr 23:33] =>  2:23
     CLOCK: [2024-06-13 Do 17:57]--[2024-06-13 Do 18:25] =>  0:28
     CLOCK: [2024-06-12 Mi 17:58]--[2024-06-12 Mi 21:50] =>  3:52
     CLOCK: [2024-06-11 Di 19:46]--[2024-06-11 Di 23:19] =>  3:33
