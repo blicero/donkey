@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-10 19:58:31 krylon>
+// Time-stamp: <2024-06-15 17:09:59 krylon>
 
 package database
 
@@ -19,33 +19,28 @@ var qDB = map[query.ID]string{
 	query.HostUpdateAddr:        "UPDATE host SET addr = ? WHERE id = ?",
 	query.HostUpdateOS:          "UPDATE host SET os = ? WHERE id = ?",
 	query.HostUpdateLastContact: "UPDATE host SET last_contact = ? WHERE id = ?",
-	query.LoadAdd: `
-INSERT INTO load (host_id, timestamp, load1, load5, load15)
-          VALUES (      ?,         ?,     ?,     ?,      ?)
-RETURNING id
-`,
+	query.LoadAdd:               "INSERT INTO record (host_id, timestamp, recordtype, payload) VALUES (?, ?, ?, ?)",
 	query.LoadGetByHost: `
 SELECT
     id,
     timestamp,
-    load1,
-    load5,
-    load15
-FROM load
-WHERE host_id = ?
-ORDER BY timestamp DESC
-LIMIT ?
+    payload ->> '$[0]' AS load1,
+    payload ->> '$[1]' AS load5,
+    payload ->> '$[2]' AS load15
+FROM record
+WHERE host_id = ? AND recordtype = ?
+ORDER BY timestamp
 `,
 	query.LoadgetByPeriod: `
 SELECT
     id,
     host_id,
     timestamp,
-    load1,
-    load5,
-    load15
-FROM load
-WHERE timestamp BETWEEN ? AND ?
+    payload ->> '$[0]' AS load1,
+    payload ->> '$[1]' AS load5,
+    payload ->> '$[2]' AS load15
+FROM record
+WHERE recordtype = ? AND timestamp BETWEEN ? AND ?
 ORDER BY timestamp, host_id
 `,
 }

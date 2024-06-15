@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-10 20:10:43 krylon>
+// Time-stamp: <2024-06-15 17:15:00 krylon>
 
 package database
 
@@ -20,6 +20,7 @@ import (
 	"github.com/blicero/donkey/database/query"
 	"github.com/blicero/donkey/logdomain"
 	"github.com/blicero/donkey/model"
+	"github.com/blicero/donkey/model/recordtype"
 	"github.com/blicero/krylib"
 	_ "github.com/mattn/go-sqlite3" // Import the database driver
 )
@@ -1321,7 +1322,7 @@ func (db *Database) LoadAdd(l *model.Load) error {
 	var rows *sql.Rows
 
 EXEC_QUERY:
-	if rows, err = stmt.Query(l.HostID, l.Timestamp.Unix(), l.Load[0], l.Load[1], l.Load[2]); err != nil {
+	if rows, err = stmt.Query(l.HostID, l.Timestamp.Unix(), recordtype.LoadAvg, l.Payload()); err != nil {
 		if worthARetry(err) {
 			waitForRetry()
 			goto EXEC_QUERY
