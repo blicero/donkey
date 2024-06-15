@@ -2,11 +2,14 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-10 19:29:45 krylon>
+// Time-stamp: <2024-06-15 16:13:15 krylon>
 
 package database
 
-var qInit []string = []string{
+// With my new approach of storing JSON in the database, I probably don't need
+// the load table, do I?
+
+var qInit = []string{
 	`
 CREATE TABLE host (
     id		INTEGER PRIMARY KEY,
@@ -39,4 +42,21 @@ CREATE TABLE load (
 `,
 	"CREATE INDEX load_host_idx ON load (host_id)",
 	"CREATE INDEX load_stamp_idx ON load (timestamp)",
+
+	`
+CREATE TABLE record (
+    id INTEGER PRIMARY KEY,
+    host_id INTEGER NOT NULL,
+    timestamp INTEGER NOT NULL,
+    recordtype INTEGER NOT NULL,
+    payload TEXT NOT NULL,
+    UNIQUE (host_id, timestamp, recordtype),
+    FOREIGN KEY (host_id) REFERENCES host (id)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE
+) STRICT
+`,
+	"CREATE INDEX record_host_idx ON record (host_id)",
+	"CREATE INDEX record_time_idx ON record (timestamp)",
+	"CREATE INDEX record_type_idx ON record (recordtype)",
 }
