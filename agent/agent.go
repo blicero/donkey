@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 11. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-14 22:12:25 krylon>
+// Time-stamp: <2024-06-15 15:48:16 krylon>
 
 // Package agent implements the client side of the application.
 package agent
@@ -198,6 +198,8 @@ func (ag *Agent) Run() {
 		case rec = <-ag.recordq:
 			// Do something
 		case sig = <-ag.sigq:
+			ag.log.Printf("[INFO] Received Signal %s, quitting Agent loop.\n",
+				sig)
 			return
 		}
 	}
