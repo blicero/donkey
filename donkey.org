@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-14 23:33:26 krylon>
+# Time-stamp: <2024-06-15 19:05:44 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,17 +12,17 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-14 Fr 23:33]
+   #+CAPTION: Clock summary at [2024-06-15 Sa 19:05]
    | Headline                 | Time      |         |       |      |
    |--------------------------+-----------+---------+-------+------|
-   | *Total time*             | *1d 1:27* |         |       |      |
+   | *Total time*             | *1d 4:53* |         |       |      |
    |--------------------------+-----------+---------+-------+------|
-   | Donkey                   | 1d 1:27   |         |       |      |
-   | \_  Components [0/0]     |           | 1d 1:27 |       |      |
-   | \_    Database [0/0]     |           |         |  4:45 |      |
+   | Donkey                   | 1d 4:53   |         |       |      |
+   | \_  Components [0/0]     |           | 1d 4:53 |       |      |
+   | \_    Database [0/0]     |           |         |  5:50 |      |
    | \_    Server [0/0]       |           |         |  9:16 |      |
    | \_      Webservice [0/0] |           |         |       | 3:07 |
-   | \_    Agent [0/0]        |           |         | 11:26 |      |
+   | \_    Agent [0/0]        |           |         | 13:47 |      |
    #+END:
 ** Diary
 ** Features [0/0]
@@ -41,11 +41,17 @@
     :VISIBILITY: children
     :END:
     :LOGBOOK:
+    CLOCK: [2024-06-15 Sa 16:17]--[2024-06-15 Sa 17:22] =>  1:05
     CLOCK: [2024-06-07 Fr 18:36]--[2024-06-07 Fr 20:42] =>  2:06
     CLOCK: [2024-06-07 Fr 18:20]--[2024-06-07 Fr 18:29] =>  0:09
     CLOCK: [2024-06-07 Fr 17:49]--[2024-06-07 Fr 18:09] =>  0:20
     CLOCK: [2024-06-06 Do 18:39]--[2024-06-06 Do 20:49] =>  2:10
     :END:
+    I need to find a way to handle differently structured kinds of data from
+    measurements, such system load avg, temperature data from sensors, etc.
+    I would like to use this opportunity to explore SQLite's JSON support.
+    So I really should need only a single table to store those records, a TEXT
+    field for the JSON payload, some metadata...
 *** Server [0/0]
     :PROPERTIES:
     :COOKIE_DATA: todo recursive
@@ -75,6 +81,8 @@
     :VISIBILITY: children
     :END:
     :LOGBOOK:
+    CLOCK: [2024-06-15 Sa 17:22]--[2024-06-15 Sa 19:05] =>  1:43
+    CLOCK: [2024-06-15 Sa 15:39]--[2024-06-15 Sa 16:17] =>  0:38
     CLOCK: [2024-06-14 Fr 21:10]--[2024-06-14 Fr 23:33] =>  2:23
     CLOCK: [2024-06-13 Do 17:57]--[2024-06-13 Do 18:25] =>  0:28
     CLOCK: [2024-06-12 Mi 17:58]--[2024-06-12 Mi 21:50] =>  3:52
