@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 01. 02. 2021 by Benjamin Walkenhorst
 // (c) 2021 Benjamin Walkenhorst
-// Time-stamp: <2024-06-11 18:45:46 krylon>
+// Time-stamp: <2024-06-15 15:45:41 krylon>
 
 //go:build ignore
 // +build ignore
@@ -62,6 +62,7 @@ var candidates = map[string][]string{
 	"generate": {
 		"common",
 		"logdomain",
+		"model/recordtype",
 		"database/query",
 		"agent/platform",
 	},
@@ -77,6 +78,7 @@ var candidates = map[string][]string{
 		"database",
 		"database/query",
 		"model",
+		"model/recordtype",
 		"server",
 	},
 	"lint": {
@@ -87,6 +89,7 @@ var candidates = map[string][]string{
 		"database",
 		"database/query",
 		"model",
+		"model/recordtype",
 		"server",
 	},
 }
