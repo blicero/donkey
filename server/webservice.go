@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 10. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-15 18:09:57 krylon>
+// Time-stamp: <2024-06-17 21:05:42 krylon>
 //
 // Code to handle interactions with Clients, i.e. the web service interface
 
@@ -19,6 +19,7 @@ import (
 
 	"github.com/blicero/donkey/database"
 	"github.com/blicero/donkey/model"
+	"github.com/blicero/krylib"
 	"github.com/gorilla/mux"
 )
 
@@ -116,7 +117,6 @@ func (srv *Server) handleClientReportData(w http.ResponseWriter, r *http.Request
 		res     model.Response
 		payload model.Record
 		host    *model.Host
-		name    string
 		body    []byte
 	)
 
@@ -139,6 +139,22 @@ func (srv *Server) handleClientReportData(w http.ResponseWriter, r *http.Request
 
 	db = srv.pool.Get()
 	defer srv.pool.Put(db)
+
+	if host, err = db.HostGetByID(krylib.ID(payload.HostID)); err != nil {
+		msg = fmt.Sprintf("Failed to look up host by ID %d in database: %s",
+			payload.HostID,
+			err.Error())
+		srv.log.Printf("[ERROR] %s\n", msg)
+		res.Message = msg
+		goto SEND_RESPONSE
+	} else if host == nil {
+		msg = fmt.Sprintf("Host ID %d was not found in database",
+			payload.HostID)
+		srv.log.Printf("[ERROR] %s\n",
+			msg)
+		res.Message = msg
+		goto SEND_RESPONSE
+	}
 
 SEND_RESPONSE:
 	res.Timestamp = time.Now()
