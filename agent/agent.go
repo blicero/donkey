@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 11. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-15 15:48:16 krylon>
+// Time-stamp: <2024-06-17 18:58:47 krylon>
 
 // Package agent implements the client side of the application.
 package agent
@@ -197,6 +197,10 @@ func (ag *Agent) Run() {
 			continue
 		case rec = <-ag.recordq:
 			// Do something
+			if err = ag.reportRecord(&rec); err != nil {
+				ag.log.Printf("[ERROR] Failed to report Record to server: %s\n",
+					err.Error())
+			}
 		case sig = <-ag.sigq:
 			ag.log.Printf("[INFO] Received Signal %s, quitting Agent loop.\n",
 				sig)
@@ -281,3 +285,71 @@ func (ag *Agent) register() error {
 
 	return nil
 } // func (ag *Agent) register() error
+
+func (ag *Agent) reportRecord(rec *model.Record) error {
+	const endpoint = "/ws/report"
+	var (
+		err        error
+		msg        string
+		serialized []byte
+		addr       = fmt.Sprintf("http://%s%s",
+			ag.server,
+			endpoint)
+		req   *http.Request
+		res   *http.Response
+		reply model.Response
+		buf   *bytes.Buffer
+	)
+
+	if rec == nil {
+		ag.log.Printf("[ERROR] record is nil\n")
+		return errors.New("record is nil")
+	}
+
+	rec.HostID = int64(ag.hostID)
+
+	if serialized, err = json.Marshal(rec); err != nil {
+		ag.log.Printf("[ERROR] Failed to serialize record: %s\n",
+			err.Error())
+		return err
+	}
+
+	buf = bytes.NewBuffer(serialized)
+
+	if req, err = http.NewRequest("POST", addr, buf); err != nil {
+		ag.log.Printf("[ERROR] Failed to create HTTP request to for %s: %s\n",
+			addr,
+			err.Error())
+		return err
+	} else if res, err = ag.client.Do(req); err != nil {
+		ag.log.Printf("[ERROR] Failed to perform HTTP request for %s: %s\n",
+			addr,
+			err.Error())
+		return err
+	}
+
+	defer res.Body.Close()
+	buf.Reset()
+
+	if res.StatusCode != 200 {
+		msg = fmt.Sprintf("Server responded with Status %s",
+			res.Status)
+		ag.log.Printf("[ERROR] %s\n", msg)
+		return errors.New(msg)
+	} else if _, err = io.Copy(buf, res.Body); err != nil {
+		ag.log.Printf("[ERROR] Failed to read Response Body: %s\n",
+			err.Error())
+		return err
+	} else if err = json.Unmarshal(buf.Bytes(), &reply); err != nil {
+		ag.log.Printf("[ERROR] Cannot decode response body: %s\n\n%s\n",
+			err.Error(),
+			buf.Bytes())
+		return err
+	} else if !reply.Status {
+		ag.log.Printf("[ERROR] Response status says no: %s\n",
+			reply.Message)
+		return errors.New(reply.Message)
+	}
+
+	return nil
+} // func (ag *Agent) reportRecord(rec *model.Record) error
