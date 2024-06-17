@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 11. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-17 18:58:47 krylon>
+// Time-stamp: <2024-06-17 20:57:38 krylon>
 
 // Package agent implements the client side of the application.
 package agent
@@ -36,6 +36,7 @@ const (
 type config struct {
 	Server string
 	HostID int64
+	Probes map[string]int
 }
 
 // Agent wraps the state of the client.
@@ -127,6 +128,20 @@ func (ag *Agent) readConfig() error {
 	}
 
 	ag.server = cfg.Server
+
+	if cfg.Probes != nil {
+		for key, interval := range cfg.Probes {
+			switch key {
+			case "load":
+				var p Probe = &LoadProbe{}
+				go ag.runProbe(p, interval)
+			default:
+				ag.log.Printf("[ERROR] Don't know anything about probe type %q\n",
+					key)
+			}
+		}
+	}
+
 	return nil
 } // func (ag *Agent) readConfig() error
 
@@ -353,3 +368,22 @@ func (ag *Agent) reportRecord(rec *model.Record) error {
 
 	return nil
 } // func (ag *Agent) reportRecord(rec *model.Record) error
+
+func (ag *Agent) runProbe(p Probe, interval int) {
+	var ticker = time.NewTicker(time.Second * time.Duration(interval))
+	defer ticker.Stop()
+
+	var (
+		err error
+		rec *model.Record
+	)
+
+	for ag.active.Load() {
+		<-ticker.C
+		if rec, err = p.Collect(); err != nil {
+			ag.log.Printf("[ERROR] Failed to get Record from Probe: %s\n",
+				err.Error())
+		}
+		ag.recordq <- *rec
+	}
+} // func (ag *Agent) runProbe(p Probe)
