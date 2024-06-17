@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-17 21:49:14 krylon>
+# Time-stamp: <2024-06-17 22:43:09 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,18 +12,19 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-17 Mo 21:49]
-   | Headline                 | Time      |         |       |      |
-   |--------------------------+-----------+---------+-------+------|
-   | *Total time*             | *1d 7:58* |         |       |      |
-   |--------------------------+-----------+---------+-------+------|
-   | Donkey                   | 1d 7:58   |         |       |      |
-   | \_  Components [0/1]     |           | 1d 7:58 |       |      |
-   | \_    Database [0/0]     |           |         |  5:50 |      |
-   | \_    Server [0/0]       |           |         | 10:06 |      |
-   | \_      Webservice [0/0] |           |         |       | 3:57 |
-   | \_    Agent [0/1]        |           |         | 16:02 |      |
-   | \_      Configuration    |           |         |       | 1:27 |
+   #+CAPTION: Clock summary at [2024-06-17 Mo 22:43]
+   | Headline                           | Time      |         |       |      |
+   |------------------------------------+-----------+---------+-------+------|
+   | *Total time*                       | *1d 8:28* |         |       |      |
+   |------------------------------------+-----------+---------+-------+------|
+   | Donkey                             | 1d 8:28   |         |       |      |
+   | \_  Components [0/1]               |           | 1d 8:28 |       |      |
+   | \_    Database [0/1]               |           |         |  6:20 |      |
+   | \_      JSON without the Argonauts |           |         |       | 0:30 |
+   | \_    Server [0/0]                 |           |         | 10:06 |      |
+   | \_      Webservice [0/0]           |           |         |       | 3:57 |
+   | \_    Agent [0/1]                  |           |         | 16:02 |      |
+   | \_      Configuration              |           |         |       | 1:27 |
    #+END:
 ** Diary
 ** Features [0/0]
@@ -36,7 +37,7 @@
    :COOKIE_DATA: todo recursive
    :VISIBILITY: children
    :END:
-*** Database [0/0]
+*** Database [0/1]
     :PROPERTIES:
     :COOKIE_DATA: todo recursive
     :VISIBILITY: children
@@ -53,6 +54,10 @@
     I would like to use this opportunity to explore SQLite's JSON support.
     So I really should need only a single table to store those records, a TEXT
     field for the JSON payload, some metadata...
+**** TODO JSON without the Argonauts
+     :LOGBOOK:
+     CLOCK: [2024-06-17 Mo 22:13]--[2024-06-17 Mo 22:43] =>  0:30
+     :END:
 *** Server [0/0]
     :PROPERTIES:
     :COOKIE_DATA: todo recursive
