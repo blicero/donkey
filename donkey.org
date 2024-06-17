@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-17 19:49:46 krylon>
+# Time-stamp: <2024-06-17 21:49:14 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,18 +12,18 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-17 Mo 19:49]
+   #+CAPTION: Clock summary at [2024-06-17 Mo 21:49]
    | Headline                 | Time      |         |       |      |
    |--------------------------+-----------+---------+-------+------|
-   | *Total time*             | *1d 6:00* |         |       |      |
+   | *Total time*             | *1d 7:58* |         |       |      |
    |--------------------------+-----------+---------+-------+------|
-   | Donkey                   | 1d 6:00   |         |       |      |
-   | \_  Components [0/0]     |           | 1d 6:00 |       |      |
+   | Donkey                   | 1d 7:58   |         |       |      |
+   | \_  Components [0/1]     |           | 1d 7:58 |       |      |
    | \_    Database [0/0]     |           |         |  5:50 |      |
-   | \_    Server [0/0]       |           |         |  9:16 |      |
-   | \_      Webservice [0/0] |           |         |       | 3:07 |
-   | \_    Agent [0/1]        |           |         | 14:54 |      |
-   | \_      Configuration    |           |         |       | 0:19 |
+   | \_    Server [0/0]       |           |         | 10:06 |      |
+   | \_      Webservice [0/0] |           |         |       | 3:57 |
+   | \_    Agent [0/1]        |           |         | 16:02 |      |
+   | \_      Configuration    |           |         |       | 1:27 |
    #+END:
 ** Diary
 ** Features [0/0]
@@ -70,6 +70,7 @@
      :VISIBILITY: children
      :END:
      :LOGBOOK:
+     CLOCK: [2024-06-17 Mo 20:59]--[2024-06-17 Mo 21:49] =>  0:50
      CLOCK: [2024-06-11 Di 17:36]--[2024-06-11 Di 18:31] =>  0:55
      CLOCK: [2024-06-11 Di 14:15]--[2024-06-11 Di 15:35] =>  1:20
      CLOCK: [2024-06-11 Di 10:55]--[2024-06-11 Di 11:47] =>  0:52
@@ -94,6 +95,7 @@
     :END:
 **** TODO Configuration
      :LOGBOOK:
+     CLOCK: [2024-06-17 Mo 19:51]--[2024-06-17 Mo 20:59] =>  1:08
      CLOCK: [2024-06-17 Mo 19:30]--[2024-06-17 Mo 19:49] =>  0:19
      :END:
      I want to be able to configure at runtime which Probes I run, at which
