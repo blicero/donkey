@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-17 19:03:37 krylon>
+# Time-stamp: <2024-06-17 19:49:46 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,17 +12,18 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-17 Mo 19:03]
+   #+CAPTION: Clock summary at [2024-06-17 Mo 19:49]
    | Headline                 | Time      |         |       |      |
    |--------------------------+-----------+---------+-------+------|
-   | *Total time*             | *1d 5:41* |         |       |      |
+   | *Total time*             | *1d 6:00* |         |       |      |
    |--------------------------+-----------+---------+-------+------|
-   | Donkey                   | 1d 5:41   |         |       |      |
-   | \_  Components [0/0]     |           | 1d 5:41 |       |      |
+   | Donkey                   | 1d 6:00   |         |       |      |
+   | \_  Components [0/0]     |           | 1d 6:00 |       |      |
    | \_    Database [0/0]     |           |         |  5:50 |      |
    | \_    Server [0/0]       |           |         |  9:16 |      |
    | \_      Webservice [0/0] |           |         |       | 3:07 |
-   | \_    Agent [0/0]        |           |         | 14:35 |      |
+   | \_    Agent [0/1]        |           |         | 14:54 |      |
+   | \_      Configuration    |           |         |       | 0:19 |
    #+END:
 ** Diary
 ** Features [0/0]
@@ -30,7 +31,7 @@
    :COOKIE_DATA: todo recursive
    :VISIBILITY: children
    :END:
-** Components [0/0]
+** Components [0/1]
    :PROPERTIES:
    :COOKIE_DATA: todo recursive
    :VISIBILITY: children
@@ -75,12 +76,13 @@
      :END:
      I should probably think about the "language" the Agent and Server speak
      to each other.
-*** Agent [0/0]
+*** Agent [0/1]
     :PROPERTIES:
     :COOKIE_DATA: todo recursive
     :VISIBILITY: children
     :END:
     :LOGBOOK:
+    CLOCK: [2024-06-17 Mo 19:30]--[2024-06-17 Mo 19:30] =>  0:00
     CLOCK: [2024-06-17 Mo 18:15]--[2024-06-17 Mo 19:03] =>  0:48
     CLOCK: [2024-06-15 Sa 17:22]--[2024-06-15 Sa 19:05] =>  1:43
     CLOCK: [2024-06-15 Sa 15:39]--[2024-06-15 Sa 16:17] =>  0:38
@@ -90,6 +92,12 @@
     CLOCK: [2024-06-11 Di 19:46]--[2024-06-11 Di 23:19] =>  3:33
     CLOCK: [2024-06-11 Di 18:31]--[2024-06-11 Di 19:41] =>  1:10
     :END:
+**** TODO Configuration
+     :LOGBOOK:
+     CLOCK: [2024-06-17 Mo 19:30]--[2024-06-17 Mo 19:49] =>  0:19
+     :END:
+     I want to be able to configure at runtime which Probes I run, at which
+     intervals, etc.
 ** Bugs [0/0]
    :PROPERTIES:
    :COOKIE_DATA: todo recursive
