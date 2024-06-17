@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-15 17:15:00 krylon>
+// Time-stamp: <2024-06-17 22:41:06 krylon>
 
 package database
 
@@ -1414,3 +1414,257 @@ EXEC_QUERY:
 
 	return data, nil
 } // func (db *Database) LoadGetByHost(id krylib.ID) ([]model.Load, error)
+
+// RecordAdd adds a Record to the database. Like, for real.
+func (db *Database) RecordAdd(rec *model.Record) error {
+	const qid query.ID = query.RecordAdd
+	var (
+		err    error
+		msg    string
+		stmt   *sql.Stmt
+		tx     *sql.Tx
+		status bool
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid.String(),
+			err.Error())
+		return err
+	} else if db.tx != nil {
+		tx = db.tx
+	} else {
+	BEGIN_AD_HOC:
+		if tx, err = db.db.Begin(); err != nil {
+			if worthARetry(err) {
+				waitForRetry()
+				goto BEGIN_AD_HOC
+			} else {
+				msg = fmt.Sprintf("Error starting transaction: %s\n",
+					err.Error())
+				db.log.Printf("[ERROR] %s\n", msg)
+				return errors.New(msg)
+			}
+
+		} else {
+			defer func() {
+				var err2 error
+				if status {
+					if err2 = tx.Commit(); err2 != nil {
+						db.log.Printf("[ERROR] Failed to commit ad-hoc transaction: %s\n",
+							err2.Error())
+					}
+				} else if err2 = tx.Rollback(); err2 != nil {
+					db.log.Printf("[ERROR] Rollback of ad-hoc transaction failed: %s\n",
+						err2.Error())
+				}
+			}()
+		}
+	}
+
+	stmt = tx.Stmt(stmt)
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(rec.HostID, rec.Timestamp.Unix(), recordtype.LoadAvg, rec.Payload); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		} else {
+			err = fmt.Errorf("Cannot add Load to database: %s",
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", err.Error())
+			return err
+		}
+	}
+
+	var id int64
+
+	defer rows.Close()
+
+	if !rows.Next() {
+		// CANTHAPPEN
+		db.log.Printf("[ERROR] Query %s did not return a value\n",
+			qid)
+		return fmt.Errorf("Query %s did not return a value", qid)
+	} else if err = rows.Scan(&id); err != nil {
+		msg = fmt.Sprintf("Failed to get ID for newly added Load data: %s",
+			err.Error())
+		db.log.Printf("[ERROR] %s\n", msg)
+		return errors.New(msg)
+	}
+
+	rec.ID = id
+	return nil
+} // func (db *Database) RecordAdd(rec *model.Record) error
+
+// RecordGetByHost retrieves all Records for a given Host, of all types.
+// Probably a bit of a blunt instrument.
+func (db *Database) RecordGetByHost(h *model.Host) ([]model.Record, error) {
+	const qid query.ID = query.RecordGetByHost
+	var (
+		err  error
+		msg  string
+		stmt *sql.Stmt
+	)
+
+	if h == nil {
+		return nil, krylib.ErrInvalidValue
+	}
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid,
+			err.Error())
+		return nil, err
+	} else if db.tx != nil {
+		stmt = db.tx.Stmt(stmt)
+	}
+
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(h.ID); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		}
+
+		return nil, err
+	}
+
+	defer rows.Close() // nolint: errcheck,gosec
+	var data = make([]model.Record, 0)
+
+	for rows.Next() {
+		var (
+			rec        = model.Record{HostID: int64(h.ID)}
+			stamp, src int64
+		)
+
+		if err = rows.Scan(&rec.ID, &stamp, &src, &rec.Payload); err != nil {
+			msg = fmt.Sprintf("Error scanning row: %s",
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return nil, errors.New(msg)
+		}
+
+		rec.Source = recordtype.ID(src)
+		rec.Timestamp = time.Unix(stamp, 0)
+
+		data = append(data, rec)
+	}
+
+	return data, nil
+} // func (db *Database) RecordGetByHost(h *model.Host) ([]model.Record, error)
+
+// RecordGetByType fetches all Records of a given type.
+func (db *Database) RecordGetByType(id recordtype.ID) ([]model.Record, error) {
+	const qid query.ID = query.RecordGetByType
+	var (
+		err  error
+		msg  string
+		stmt *sql.Stmt
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid,
+			err.Error())
+		return nil, err
+	} else if db.tx != nil {
+		stmt = db.tx.Stmt(stmt)
+	}
+
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(id); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		}
+
+		return nil, err
+	}
+
+	defer rows.Close() // nolint: errcheck,gosec
+	var data = make([]model.Record, 0)
+
+	for rows.Next() {
+		var (
+			rec   = model.Record{Source: id}
+			stamp int64
+		)
+
+		if err = rows.Scan(&rec.ID, &rec.HostID, &stamp, &rec.Payload); err != nil {
+			msg = fmt.Sprintf("Error scanning row: %s",
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return nil, errors.New(msg)
+		}
+
+		rec.Timestamp = time.Unix(stamp, 0)
+
+		data = append(data, rec)
+	}
+
+	return data, nil
+} // func (db *Database) RecordGetByType(id recordtype.ID) ([]model.Record, error)
+
+// RecordGetByHostType fetches all records for a given Host of a given type.
+func (db *Database) RecordGetByHostType(h *model.Host, t recordtype.ID) ([]model.Record, error) {
+	const qid query.ID = query.RecordGetByHostType
+	var (
+		err  error
+		msg  string
+		stmt *sql.Stmt
+	)
+
+	if stmt, err = db.getQuery(qid); err != nil {
+		db.log.Printf("[ERROR] Cannot prepare query %s: %s\n",
+			qid,
+			err.Error())
+		return nil, err
+	} else if db.tx != nil {
+		stmt = db.tx.Stmt(stmt)
+	}
+
+	var rows *sql.Rows
+
+EXEC_QUERY:
+	if rows, err = stmt.Query(h.ID, t); err != nil {
+		if worthARetry(err) {
+			waitForRetry()
+			goto EXEC_QUERY
+		}
+
+		return nil, err
+	}
+
+	defer rows.Close() // nolint: errcheck,gosec
+	var data = make([]model.Record, 0)
+
+	for rows.Next() {
+		var (
+			rec = model.Record{
+				HostID: int64(h.ID),
+				Source: t,
+			}
+			stamp int64
+		)
+
+		if err = rows.Scan(&rec.ID, &rec.HostID, &stamp, &rec.Payload); err != nil {
+			msg = fmt.Sprintf("Error scanning row: %s",
+				err.Error())
+			db.log.Printf("[ERROR] %s\n", msg)
+			return nil, errors.New(msg)
+		}
+
+		rec.Timestamp = time.Unix(stamp, 0)
+
+		data = append(data, rec)
+	}
+
+	return data, nil
+} // func (db *Database) RecordGetByHostType(h *model.Host, t recordtype.ID) ([]model.Record, error)

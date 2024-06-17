@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-15 17:09:59 krylon>
+// Time-stamp: <2024-06-17 22:41:49 krylon>
 
 package database
 
@@ -42,5 +42,35 @@ SELECT
 FROM record
 WHERE recordtype = ? AND timestamp BETWEEN ? AND ?
 ORDER BY timestamp, host_id
+`,
+	query.RecordAdd: "INSERT INTO record (host_id, timestamp, recordtype, payload) VALUES (?, ?, ?, ?)",
+	query.RecordGetByHost: `
+SELECT
+    id,
+    timestamp,
+    recordtype,
+    payload
+FROM record
+WHERE host_id = ?
+ORDER BY timestamp, recordtype
+`,
+	query.RecordGetByType: `
+SELECT
+    id,
+    host_id,
+    timestamp,
+    payload
+FROM record
+WHERE recordtype = ?
+ORDER BY host_id, timestamp
+`,
+	query.RecordGetByHostType: `
+SELECT
+    id,
+    timestamp,
+    payload
+FROM record
+WHERE host_id = ? AND recordtype = ?
+ORDER BY timestamp
 `,
 }
