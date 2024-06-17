@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 17. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-17 19:01:51 krylon>
+// Time-stamp: <2024-06-17 19:34:14 krylon>
 
 package agent
 
@@ -14,10 +14,12 @@ import (
 
 func TestLoadProbe(t *testing.T) {
 	var (
-		lp  LoadProbe
+		lp  Probe
 		err error
 		rec *model.Record
 	)
+
+	lp = &LoadProbe{}
 
 	if rec, err = lp.Collect(); err != nil {
 		t.Errorf("Failed to collect load average: %s\n", err.Error())
