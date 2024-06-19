@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-18 15:32:50 krylon>
+# Time-stamp: <2024-06-19 19:08:05 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,17 +12,17 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-18 Di 15:32]
+   #+CAPTION: Clock summary at [2024-06-19 Mi 19:08]
    | Headline                           | Time      |         |       |      |
    |------------------------------------+-----------+---------+-------+------|
-   | *Total time*                       | *1d 9:35* |         |       |      |
+   | *Total time*                       | *1d 9:53* |         |       |      |
    |------------------------------------+-----------+---------+-------+------|
-   | Donkey                             | 1d 9:35   |         |       |      |
-   | \_  Components [0/1]               |           | 1d 9:35 |       |      |
+   | Donkey                             | 1d 9:53   |         |       |      |
+   | \_  Components [0/1]               |           | 1d 9:53 |       |      |
    | \_    Database [0/1]               |           |         |  6:20 |      |
    | \_      JSON without the Argonauts |           |         |       | 0:30 |
-   | \_    Server [0/0]                 |           |         | 11:13 |      |
-   | \_      Webservice [0/0]           |           |         |       | 5:04 |
+   | \_    Server [0/0]                 |           |         | 11:31 |      |
+   | \_      Webservice [0/0]           |           |         |       | 5:22 |
    | \_    Agent [0/1]                  |           |         | 16:02 |      |
    | \_      Configuration              |           |         |       | 1:27 |
    #+END:
@@ -75,6 +75,7 @@
      :VISIBILITY: children
      :END:
      :LOGBOOK:
+     CLOCK: [2024-06-19 Mi 18:50]--[2024-06-19 Mi 19:08] =>  0:18
      CLOCK: [2024-06-18 Di 14:25]--[2024-06-18 Di 15:32] =>  1:07
      CLOCK: [2024-06-17 Mo 20:59]--[2024-06-17 Mo 21:49] =>  0:50
      CLOCK: [2024-06-11 Di 17:36]--[2024-06-11 Di 18:31] =>  0:55
