@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 07. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-11 18:22:48 krylon>
+// Time-stamp: <2024-06-18 15:26:31 krylon>
 
 package server
 
@@ -136,6 +136,7 @@ func Create(addr string) (*Server, error) {
 	// Agent handlers
 	srv.router.HandleFunc("/ws/register", srv.handleClientRegister)
 	srv.router.HandleFunc("/ws/report/load/{name:(?:\\w+$)}", srv.handleClientReportLoad)
+	srv.router.HandleFunc("/ws/report", srv.handleClientReportData)
 
 	// AJAX Handlers
 	srv.router.HandleFunc("/ajax/beacon", srv.handleBeacon)

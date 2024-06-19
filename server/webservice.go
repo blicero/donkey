@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 10. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-17 21:05:42 krylon>
+// Time-stamp: <2024-06-18 15:25:08 krylon>
 //
 // Code to handle interactions with Clients, i.e. the web service interface
 
@@ -154,7 +154,17 @@ func (srv *Server) handleClientReportData(w http.ResponseWriter, r *http.Request
 			msg)
 		res.Message = msg
 		goto SEND_RESPONSE
+	} else if err = db.RecordAdd(&payload); err != nil {
+		msg = fmt.Sprintf("Failed to add Record to Database: %s",
+			err.Error())
+		srv.log.Printf("[ERROR] %s\n", msg)
+		res.Message = msg
+		goto SEND_RESPONSE
 	}
+
+	res.Message = fmt.Sprintf("Record added to database, ID = %d",
+		payload.ID)
+	res.Status = true
 
 SEND_RESPONSE:
 	res.Timestamp = time.Now()
