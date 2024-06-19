@@ -1,6 +1,6 @@
 module github.com/blicero/donkey
 
-go 1.22.0
+go 1.22
 
 require (
 	github.com/blicero/krylib v0.0.0-20230308180103-2ef208d8985d
