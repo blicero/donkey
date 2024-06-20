@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 19. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-19 19:03:06 krylon>
+// Time-stamp: <2024-06-20 13:31:10 krylon>
 
 package server
 
@@ -29,7 +29,7 @@ func TestMain(m *testing.M) {
 			baseDir,
 			err.Error())
 		os.Exit(1)
-	} else if err = prepare_db(); err != nil {
+	} else if err = prepareDB(); err != nil {
 		fmt.Fprintf(os.Stderr,
 			"Failed to initialize database: %s\n",
 			err.Error())
@@ -49,13 +49,13 @@ func TestMain(m *testing.M) {
 	os.Exit(result)
 } // func TestMain(m *testing.M)
 
-func prepare_db() error {
+func prepareDB() error {
 	var (
 		err error
 		db  *database.Database
 	)
 
-	var test_hosts = []model.Host{
+	var testHosts = []model.Host{
 		{
 			Name: "abobo",
 			Addr: "10.10.99.1",
@@ -79,9 +79,9 @@ func prepare_db() error {
 		return err
 	}
 
-	for _, h := range test_hosts {
+	for _, h := range testHosts {
 		if err = db.HostAdd(&h); err != nil {
-			db.Rollback()
+			db.Rollback() // nolint: errcheck
 			return err
 		}
 	}
