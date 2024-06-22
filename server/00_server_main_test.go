@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 19. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-20 13:31:10 krylon>
+// Time-stamp: <2024-06-22 14:58:21 krylon>
 
 package server
 
@@ -16,6 +16,24 @@ import (
 	"github.com/blicero/donkey/database"
 	"github.com/blicero/donkey/model"
 )
+
+var testHosts = []model.Host{
+	{
+		Name: "abobo",
+		Addr: "10.10.99.1",
+		OS:   "Debian",
+	},
+	{
+		Name: "bbobo",
+		Addr: "10.10.99.2",
+		OS:   "FreeBSD",
+	},
+	{
+		Name: "cbobo",
+		Addr: "10.10.99.3",
+		OS:   "OpenBSD",
+	},
+}
 
 func TestMain(m *testing.M) {
 	var (
@@ -39,9 +57,9 @@ func TestMain(m *testing.M) {
 		// database inside it) around, so we can manually inspect it
 		// if needed.
 		// If all tests pass, OTOH, we can safely remove the directory.
-		fmt.Printf("Removing BaseDir %s\n",
-			baseDir)
-		_ = os.RemoveAll(baseDir)
+		// fmt.Printf("Removing BaseDir %s\n",
+		// 	baseDir)
+		// _ = os.RemoveAll(baseDir)
 	} else {
 		fmt.Printf(">>> TEST DIRECTORY: %s\n", baseDir)
 	}
@@ -55,35 +73,33 @@ func prepareDB() error {
 		db  *database.Database
 	)
 
-	var testHosts = []model.Host{
-		{
-			Name: "abobo",
-			Addr: "10.10.99.1",
-			OS:   "Debian",
-		},
-		{
-			Name: "bbobo",
-			Addr: "10.10.99.2",
-			OS:   "FreeBSD",
-		},
-		{
-			Name: "cbobo",
-			Addr: "10.10.99.3",
-			OS:   "OpenBSD",
-		},
-	}
-
 	if db, err = database.Open(common.DbPath); err != nil {
 		return err
 	} else if err = db.Begin(); err != nil {
 		return err
 	}
 
-	for _, h := range testHosts {
+	for i, h := range testHosts {
 		if err = db.HostAdd(&h); err != nil {
 			db.Rollback() // nolint: errcheck
 			return err
+		} else if h.ID == 0 {
+			err = fmt.Errorf("Host did not receive an ID: %s / %s",
+				h.Name,
+				h.Addr)
+			db.Rollback() // nolint: errcheck
+			return err
+		} else {
+			fmt.Fprintf(
+				os.Stderr,
+				"INIT: Host #%d - %s / %s - ID = %d\n",
+				i,
+				h.Name,
+				h.Addr,
+				h.ID)
 		}
+
+		testHosts[i].ID = h.ID
 	}
 
 	if err = db.Commit(); err != nil {
