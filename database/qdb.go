@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-17 22:41:49 krylon>
+// Time-stamp: <2024-06-22 14:53:53 krylon>
 
 package database
 
@@ -43,7 +43,11 @@ FROM record
 WHERE recordtype = ? AND timestamp BETWEEN ? AND ?
 ORDER BY timestamp, host_id
 `,
-	query.RecordAdd: "INSERT INTO record (host_id, timestamp, recordtype, payload) VALUES (?, ?, ?, ?)",
+	query.RecordAdd: `
+INSERT INTO record (host_id, timestamp, recordtype, payload)
+            VALUES (      ?,         ?,          ?,       ?)
+RETURNING id
+`,
 	query.RecordGetByHost: `
 SELECT
     id,
