@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 07. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-23 17:50:35 krylon>
+// Time-stamp: <2024-06-24 17:00:32 krylon>
 
 package database
 
@@ -42,10 +42,22 @@ func TestHostAdd(t *testing.T) {
 		},
 		{
 			h: model.Host{
+				Name: "bbobo",
+				Addr: "192.168.0.3",
+			},
+		},
+		{
+			h: model.Host{
 				Name: "cbobo",
 				Addr: "",
 			},
 			expectError: true,
+		},
+		{
+			h: model.Host{
+				Name: "cbobo",
+				Addr: "192.168.0.4",
+			},
 		},
 	}
 
@@ -79,13 +91,23 @@ func TestRecordAdd(t *testing.T) {
 
 	const recCnt = 25
 	var (
-		err   error
-		hosts []model.Host
+		err    error
+		hosts  []model.Host
+		status bool
 	)
 
 	if hosts, err = tdb.HostGetAll(); err != nil {
 		t.Fatalf("Error fetching all hosts: %s", err.Error())
 	}
+
+	tdb.Begin() // nolint: errcheck
+	defer func() {
+		if status {
+			tdb.Commit() // nolint: errcheck
+		} else {
+			tdb.Rollback() // nolint: errcheck
+		}
+	}()
 
 	for _, h := range hosts {
 		var stamp = time.Date(2024, 4, 1, 8, 15, 0, 0, time.Local)
@@ -121,4 +143,6 @@ func TestRecordAdd(t *testing.T) {
 			}
 		}
 	}
+
+	status = true
 } // func TestRecordAdd(t *testing.T)

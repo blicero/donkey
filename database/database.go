@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-17 22:41:06 krylon>
+// Time-stamp: <2024-06-24 17:05:45 krylon>
 
 package database
 
@@ -569,6 +569,9 @@ func (db *Database) HostAdd(h *model.Host) error {
 	} else if db.tx != nil {
 		tx = db.tx
 	} else {
+		db.log.Printf("[INFO] Start ad-hoc transaction for adding Host %s (%s)\n",
+			h.Name,
+			h.Addr)
 	BEGIN_AD_HOC:
 		if tx, err = db.db.Begin(); err != nil {
 			if worthARetry(err) {
@@ -633,6 +636,7 @@ EXEC_QUERY:
 		}
 
 		h.ID = krylib.ID(id)
+		status = true
 		return nil
 	}
 } // func (db *Database) HostAdd(h *model.Host) error
@@ -933,6 +937,7 @@ EXEC_QUERY:
 			id)
 	}
 
+	status = true
 	return nil
 } // func (db *Database) HostDelete(id krylib.ID) error
 
@@ -1016,6 +1021,7 @@ EXEC_QUERY:
 		h.Name = name
 	}
 
+	status = true
 	return nil
 } // func (db *Database) HostUpdateName(h *model.Host, name string) error
 
@@ -1100,6 +1106,7 @@ EXEC_QUERY:
 		h.Addr = addr
 	}
 
+	status = true
 	return nil
 } // func (db *Database) HostUpdateAddress(h *model.Host, addr string) error
 
@@ -1184,6 +1191,7 @@ EXEC_QUERY:
 		h.OS = os
 	}
 
+	status = true
 	return nil
 } // func (db *Database) HostUpdateOS(h *model.Host, os string) error
 
@@ -1268,6 +1276,7 @@ EXEC_QUERY:
 		h.LastContact = stamp
 	}
 
+	status = true
 	return nil
 } // func (db *Database) HostUpdateLastContact(h *model.Host, stamp time.Time) error
 
@@ -1350,6 +1359,7 @@ EXEC_QUERY:
 		}
 
 		l.ID = krylib.ID(id)
+		status = true
 		return nil
 	}
 } // func (db *Database) LoadAdd(l *Load) error
@@ -1434,6 +1444,8 @@ func (db *Database) RecordAdd(rec *model.Record) error {
 	} else if db.tx != nil {
 		tx = db.tx
 	} else {
+		db.log.Printf("[INFO] Start ad-hoc transaction for adding Record for Host #%d\n",
+			rec.HostID)
 	BEGIN_AD_HOC:
 		if tx, err = db.db.Begin(); err != nil {
 			if worthARetry(err) {
@@ -1495,6 +1507,7 @@ EXEC_QUERY:
 	}
 
 	rec.ID = id
+	status = true
 	return nil
 } // func (db *Database) RecordAdd(rec *model.Record) error
 

@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 19. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-22 14:20:39 krylon>
+// Time-stamp: <2024-06-24 17:23:47 krylon>
 
 package server
 
@@ -65,7 +65,7 @@ func TestReportData(t *testing.T) {
 			HostID:    int64(h.ID),
 			Timestamp: time.Now(),
 			Source:    recordtype.LoadAvg,
-			Payload:   "[ 1.15, 3.17, 5.2 ]",
+			Payload:   "[1.15, 3.17, 5.2]",
 		}
 
 		if serialized, err = json.Marshal(&rec); err != nil {
