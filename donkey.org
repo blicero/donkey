@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-23 17:57:56 krylon>
+# Time-stamp: <2024-06-24 20:14:59 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,18 +12,18 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-23 So 17:57]
+   #+CAPTION: Clock summary at [2024-06-24 Mo 20:14]
    | Headline                           | Time       |          |       |      |
    |------------------------------------+------------+----------+-------+------|
-   | *Total time*                       | *1d 14:50* |          |       |      |
+   | *Total time*                       | *1d 15:17* |          |       |      |
    |------------------------------------+------------+----------+-------+------|
-   | Donkey                             | 1d 14:50   |          |       |      |
-   | \_  Components [0/1]               |            | 1d 14:50 |       |      |
+   | Donkey                             | 1d 15:17   |          |       |      |
+   | \_  Components [0/1]               |            | 1d 15:17 |       |      |
    | \_    Database [1/2]               |            |          |  8:39 |      |
    | \_      JSON without the Argonauts |            |          |       | 0:30 |
    | \_      Testing                    |            |          |       | 2:19 |
-   | \_    Server [0/0]                 |            |          | 14:09 |      |
-   | \_      Webservice [0/0]           |            |          |       | 8:00 |
+   | \_    Server [0/0]                 |            |          | 14:36 |      |
+   | \_      Webservice [0/0]           |            |          |       | 8:27 |
    | \_    Agent [0/1]                  |            |          | 16:02 |      |
    | \_      Configuration              |            |          |       | 1:27 |
    #+END:
@@ -83,6 +83,7 @@
      :VISIBILITY: children
      :END:
      :LOGBOOK:
+     CLOCK: [2024-06-24 Mo 17:08]--[2024-06-24 Mo 17:35] =>  0:27
      CLOCK: [2024-06-22 Sa 13:38]--[2024-06-22 Sa 16:16] =>  2:38
      CLOCK: [2024-06-19 Mi 18:50]--[2024-06-19 Mi 19:08] =>  0:18
      CLOCK: [2024-06-18 Di 14:25]--[2024-06-18 Di 15:32] =>  1:07
