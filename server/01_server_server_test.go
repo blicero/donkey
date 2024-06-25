@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 19. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-24 17:23:47 krylon>
+// Time-stamp: <2024-06-25 14:47:06 krylon>
 
 package server
 
@@ -19,7 +19,7 @@ import (
 	"github.com/blicero/donkey/model/recordtype"
 )
 
-const testAddr = "localhost:4197"
+const testAddr = "[::1]:4197"
 
 var srv *Server
 
