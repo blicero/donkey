@@ -1,0 +1,1077 @@
+{
+  "jc42-i2c-0-1b": {
+    "Adapter": "SMBus PIIX4 adapter port 0 at 0b00",
+    "temp1": {
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 38.75
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "min": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "crit_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "max_alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "min_alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "crit_alarm": {
+        "quantity": "boolean",
+        "value": 1
+      }
+    }
+  },
+  "k10temp-pci-00c3": {
+    "Adapter": "PCI adapter",
+    "temp1": {
+      "label": "Tctl",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 61.75
+      }
+    },
+    "temp3": {
+      "label": "Tccd1",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 59.75
+      }
+    }
+  },
+  "nct6798-isa-0290": {
+    "Adapter": "ISA adapter",
+    "in0": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0.464
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 1.744
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in1": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 1.672
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in2": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 3.424
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in3": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 3.344
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in4": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 1.848
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in5": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0.968
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in6": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 1.232
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in7": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 3.424
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in8": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 3.264
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in9": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 3.344
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in10": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 2.048
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in11": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 1.264
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in12": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0.944
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in13": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0.92
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "in14": {
+      "input": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0.904
+      },
+      "min": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "max": {
+        "quantity": "voltage",
+        "unit": "V",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "fan1": {
+      "input": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "min": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "pulses": {
+        "value": 2
+      }
+    },
+    "fan2": {
+      "input": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 1009
+      },
+      "min": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "pulses": {
+        "value": 2
+      }
+    },
+    "fan3": {
+      "input": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 2261
+      },
+      "min": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "pulses": {
+        "value": 2
+      }
+    },
+    "fan4": {
+      "input": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 876
+      },
+      "min": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "pulses": {
+        "value": 2
+      }
+    },
+    "fan5": {
+      "input": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "min": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "pulses": {
+        "value": 2
+      }
+    },
+    "fan6": {
+      "input": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "min": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "pulses": {
+        "value": 2
+      }
+    },
+    "fan7": {
+      "input": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "min": {
+        "quantity": "speed",
+        "unit": "RPM",
+        "value": 0
+      },
+      "pulses": {
+        "value": 2
+      }
+    },
+    "temp1": {
+      "label": "SYSTIN",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 36
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 75
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "type": {
+        "label": "thermistor",
+        "value": 4
+      },
+      "offset": {
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "temp2": {
+      "label": "CPUTIN",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 52
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 75
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "type": {
+        "label": "thermistor",
+        "value": 4
+      },
+      "offset": {
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "temp3": {
+      "label": "AUXTIN0",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 14
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 75
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "type": {
+        "label": "thermistor",
+        "value": 4
+      },
+      "offset": {
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "temp4": {
+      "label": "AUXTIN1",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": -62
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 75
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "type": {
+        "label": "thermistor",
+        "value": 4
+      },
+      "offset": {
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "temp5": {
+      "label": "AUXTIN2",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 12
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 75
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "type": {
+        "label": "thermistor",
+        "value": 4
+      },
+      "offset": {
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "temp6": {
+      "label": "AUXTIN3",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 31
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 75
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "type": {
+        "label": "thermistor",
+        "value": 4
+      },
+      "offset": {
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "temp7": {
+      "label": "SMBUSMASTER 1",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 56
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 105
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 95
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "temp8": {
+      "label": "AUXTIN4",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 27
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 80
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 75
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 100
+      },
+      "alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "temp9": {
+      "label": "SMBUSMASTER 0",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 62.5
+      }
+    },
+    "temp10": {
+      "label": "PCH_CHIP_CPU_MAX_TEMP",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      }
+    },
+    "temp11": {
+      "label": "PCH_CHIP_TEMP",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      }
+    },
+    "temp12": {
+      "label": "PCH_CPU_TEMP",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      }
+    },
+    "temp13": {
+      "label": "TSI0_TEMP",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 62.5
+      }
+    },
+    "temp14": {
+      "label": "TSI1_TEMP",
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 56.375
+      }
+    },
+    "pwm1": {
+      "pwm1": {
+        "quantity": "pwm",
+        "unit": "%",
+        "value": 63.5
+      },
+      "enable": {
+        "quantity": "boolean",
+        "value": 5
+      },
+      "mode": {
+        "value": 1
+      }
+    },
+    "pwm2": {
+      "pwm2": {
+        "quantity": "pwm",
+        "unit": "%",
+        "value": 94.5
+      },
+      "enable": {
+        "quantity": "boolean",
+        "value": 5
+      },
+      "mode": {
+        "value": 1
+      }
+    },
+    "pwm3": {
+      "pwm3": {
+        "quantity": "pwm",
+        "unit": "%",
+        "value": 94.5
+      },
+      "enable": {
+        "quantity": "boolean",
+        "value": 5
+      },
+      "mode": {
+        "value": 1
+      }
+    },
+    "pwm4": {
+      "pwm4": {
+        "quantity": "pwm",
+        "unit": "%",
+        "value": 63.5
+      },
+      "enable": {
+        "quantity": "boolean",
+        "value": 5
+      },
+      "mode": {
+        "value": 1
+      }
+    },
+    "pwm5": {
+      "pwm5": {
+        "quantity": "pwm",
+        "unit": "%",
+        "value": 63.5
+      },
+      "enable": {
+        "quantity": "boolean",
+        "value": 5
+      },
+      "mode": {
+        "value": 1
+      }
+    },
+    "pwm6": {
+      "pwm6": {
+        "quantity": "pwm",
+        "unit": "%",
+        "value": 0
+      },
+      "enable": {
+        "quantity": "boolean",
+        "value": 5
+      },
+      "mode": {
+        "value": 1
+      }
+    },
+    "intrusion0": {
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "intrusion1": {
+      "alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "beep": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    },
+    "beep_enable": {
+      "beep_enable": {
+        "quantity": "boolean",
+        "value": 0
+      }
+    }
+  },
+  "jc42-i2c-0-1a": {
+    "Adapter": "SMBus PIIX4 adapter port 0 at 0b00",
+    "temp1": {
+      "input": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 40.25
+      },
+      "max": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "max_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "min": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "crit": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "crit_hyst": {
+        "quantity": "temperature",
+        "unit": "°C",
+        "value": 0
+      },
+      "max_alarm": {
+        "quantity": "boolean",
+        "value": 1
+      },
+      "min_alarm": {
+        "quantity": "boolean",
+        "value": 0
+      },
+      "crit_alarm": {
+        "quantity": "boolean",
+        "value": 1
+      }
+    }
+  }
+}

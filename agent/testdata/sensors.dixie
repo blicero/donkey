@@ -1,0 +1,14 @@
+{
+   "cpu_thermal-virtual-0":{
+      "Adapter": "Virtual device",
+      "temp1":{
+         "temp1_input": 48.692
+      }
+   },
+   "rpi_volt-isa-0000":{
+      "Adapter": "ISA adapter",
+      "in0":{
+         "in0_lcrit_alarm": 0.000
+      }
+   }
+}

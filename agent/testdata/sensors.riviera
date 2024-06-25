@@ -1,0 +1,32 @@
+{
+   "coretemp-isa-0000":{
+      "Adapter": "ISA adapter",
+      "Core 0":{
+         "temp2_input": 15.000,
+         "temp2_crit": 90.000,
+         "temp2_crit_alarm": 0.000
+      }
+   },
+   "acpitz-acpi-0":{
+      "Adapter": "ACPI interface",
+      "temp1":{
+         "temp1_input": 53.000,
+         "temp1_crit": 85.000
+      }
+   },
+   "eeepc-isa-0000":{
+      "Adapter": "ISA adapter",
+      "fan1":{
+         "fan1_input": 1170.000
+      }
+   },
+   "BAT0-acpi-0":{
+      "Adapter": "ACPI interface",
+      "in0":{
+         "in0_input": 8.256
+      },
+      "curr1":{
+         "curr1_input": 0.000
+      }
+   }
+}

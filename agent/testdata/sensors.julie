@@ -1,0 +1,232 @@
+{
+   "applesmc-isa-0300":{
+      "Adapter": "ISA adapter",
+      "Exhaust  ":{
+         "fan1_input": 3207.000,
+         "fan1_min": 3087.000,
+         "fan1_max": 5500.000
+      },
+      "TA0P":{
+         "temp1_input": 52.000
+      },
+      "TA0p":{
+         "temp2_input": 52.000
+      },
+      "TA1P":{
+         "temp3_input": 49.750
+      },
+      "TA1p":{
+         "temp4_input": 49.750
+      },
+      "TC0C":{
+         "temp5_input": 59.000
+      },
+      "TC0D":{
+         "temp6_input": 61.250
+      },
+      "TC0E":{
+         "temp7_input": 63.500
+      },
+      "TC0F":{
+         "temp8_input": 63.750
+      },
+      "TC0G":{
+         "temp9_input": 99.000
+      },
+      "TC0J":{
+         "temp10_input": 0.250
+      },
+      "TC0P":{
+         "temp11_input": 56.500
+      },
+      "TC0c":{
+         "temp12_input": 59.000
+      },
+      "TC0d":{
+         "temp13_input": 61.250
+      },
+      "TC0p":{
+         "temp14_input": 56.500
+      },
+      "TC1C":{
+         "temp15_input": 62.000
+      },
+      "TC1c":{
+         "temp16_input": 62.000
+      },
+      "TC2C":{
+         "temp17_input": 63.000
+      },
+      "TC2c":{
+         "temp18_input": 63.000
+      },
+      "TC3C":{
+         "temp19_input": 62.000
+      },
+      "TC3c":{
+         "temp20_input": 62.000
+      },
+      "TCGC":{
+         "temp21_input": 63.000
+      },
+      "TCGc":{
+         "temp22_input": 63.000
+      },
+      "TCPG":{
+         "temp23_input": 103.000
+      },
+      "TCSC":{
+         "temp24_input": 63.000
+      },
+      "TCSc":{
+         "temp25_input": 63.000
+      },
+      "TCTD":{
+         "temp26_input": 0.000
+      },
+      "TCXC":{
+         "temp27_input": 63.500
+      },
+      "TCXc":{
+         "temp28_input": 63.500
+      },
+      "TCXr":{
+         "temp29_input": -41.500
+      },
+      "TH0A":{
+         "temp30_input": -127.000
+      },
+      "TH0B":{
+         "temp31_input": -127.000
+      },
+      "TH0C":{
+         "temp32_input": -127.000
+      },
+      "TH0F":{
+         "temp33_input": 0.000
+      },
+      "TH0O":{
+         "temp34_input": -7.000
+      },
+      "TH0X":{
+         "temp35_input": -127.000
+      },
+      "TH0a":{
+         "temp36_input": -127.000
+      },
+      "TH0b":{
+         "temp37_input": -127.000
+      },
+      "TH0c":{
+         "temp38_input": -127.000
+      },
+      "TH1A":{
+         "temp39_input": -127.000
+      },
+      "TH1B":{
+         "temp40_input": -127.000
+      },
+      "TH1C":{
+         "temp41_input": -127.000
+      },
+      "TH1F":{
+         "temp42_input": 0.000
+      },
+      "TH1O":{
+         "temp43_input": 9.000
+      },
+      "TH1X":{
+         "temp44_input": -127.000
+      },
+      "TH1a":{
+         "temp45_input": -127.000
+      },
+      "TH1b":{
+         "temp46_input": -127.000
+      },
+      "TH1c":{
+         "temp47_input": -127.000
+      },
+      "TI0P":{
+         "temp48_input": 54.000
+      },
+      "TI0p":{
+         "temp49_input": 54.000
+      },
+      "TI1P":{
+         "temp50_input": 51.500
+      },
+      "TI1p":{
+         "temp51_input": 51.500
+      },
+      "TM0P":{
+         "temp52_input": 54.250
+      },
+      "TM0S":{
+         "temp53_input": 57.500
+      },
+      "TM0p":{
+         "temp54_input": 54.250
+      },
+      "TMBS":{
+         "temp55_input": -127.000
+      },
+      "TP0P":{
+         "temp56_input": 55.750
+      },
+      "TP0p":{
+         "temp57_input": 55.750
+      },
+      "TPCD":{
+         "temp58_input": 59.000
+      },
+      "TW0P":{
+         "temp59_input": 52.500
+      },
+      "TW0p":{
+         "temp60_input": 52.500
+      },
+      "Tp0C":{
+         "temp61_input": 46.750
+      },
+      "Ts0G":{
+         "temp62_input": 49.000
+      },
+      "Ts0S":{
+         "temp63_input": 43.250
+      }
+   },
+   "coretemp-isa-0000":{
+      "Adapter": "ISA adapter",
+      "Package id 0":{
+         "temp1_input": 63.000,
+         "temp1_max": 87.000,
+         "temp1_crit": 105.000,
+         "temp1_crit_alarm": 0.000
+      },
+      "Core 0":{
+         "temp2_input": 58.000,
+         "temp2_max": 87.000,
+         "temp2_crit": 105.000,
+         "temp2_crit_alarm": 0.000
+      },
+      "Core 1":{
+         "temp3_input": 60.000,
+         "temp3_max": 87.000,
+         "temp3_crit": 105.000,
+         "temp3_crit_alarm": 0.000
+      },
+      "Core 2":{
+         "temp4_input": 62.000,
+         "temp4_max": 87.000,
+         "temp4_crit": 105.000,
+         "temp4_crit_alarm": 0.000
+      },
+      "Core 3":{
+         "temp5_input": 60.000,
+         "temp5_max": 87.000,
+         "temp5_crit": 105.000,
+         "temp5_crit_alarm": 0.000
+      }
+   }
+}
