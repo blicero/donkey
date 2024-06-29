@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 05. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-11 18:51:39 krylon>
+// Time-stamp: <2024-06-29 14:47:39 krylon>
 
 package logdomain
 
@@ -19,6 +19,7 @@ const (
 	Database
 	Server
 	Agent
+	Probe
 )
 
 // AllDomains returns a slice of all the valid values for ID.
@@ -30,5 +31,6 @@ func AllDomains() []ID {
 		Database,
 		Server,
 		Agent,
+		Probe,
 	}
 } // func AllDomains() []ID
