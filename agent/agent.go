@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 11. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-06-17 20:57:38 krylon>
+// Time-stamp: <2024-07-01 19:37:44 krylon>
 
 // Package agent implements the client side of the application.
 package agent
@@ -92,7 +92,7 @@ func Create(srv string) (*Agent, error) {
 	return ag, nil
 } // func Create(srv string) (*Agent, error)
 
-func (ag *Agent) readConfig() error {
+func (ag *Agent) readConfig(path string) error {
 	var (
 		fh  *os.File
 		cfg config
@@ -100,7 +100,7 @@ func (ag *Agent) readConfig() error {
 		err error
 	)
 
-	if fh, err = os.Open(common.AgentConfPath); err != nil {
+	if fh, err = os.Open(path); err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
 			ag.log.Printf("[INFO] Agent configuration file %s does not exist.\n",
 				common.AgentConfPath)
