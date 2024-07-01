@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-06-24 20:14:59 krylon>
+# Time-stamp: <2024-07-01 20:49:02 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,20 +12,21 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-06-24 Mo 20:14]
+   #+CAPTION: Clock summary at [2024-07-01 Mo 20:49]
    | Headline                           | Time       |          |       |      |
    |------------------------------------+------------+----------+-------+------|
-   | *Total time*                       | *1d 15:17* |          |       |      |
+   | *Total time*                       | *1d 21:17* |          |       |      |
    |------------------------------------+------------+----------+-------+------|
-   | Donkey                             | 1d 15:17   |          |       |      |
-   | \_  Components [0/1]               |            | 1d 15:17 |       |      |
+   | Donkey                             | 1d 21:17   |          |       |      |
+   | \_  Components [0/1]               |            | 1d 21:17 |       |      |
    | \_    Database [1/2]               |            |          |  8:39 |      |
    | \_      JSON without the Argonauts |            |          |       | 0:30 |
    | \_      Testing                    |            |          |       | 2:19 |
    | \_    Server [0/0]                 |            |          | 14:36 |      |
    | \_      Webservice [0/0]           |            |          |       | 8:27 |
-   | \_    Agent [0/1]                  |            |          | 16:02 |      |
+   | \_    Agent [0/2]                  |            |          | 22:02 |      |
    | \_      Configuration              |            |          |       | 1:27 |
+   | \_      Probes [0/0]               |            |          |       | 6:00 |
    #+END:
 ** Diary
 ** Features [0/0]
@@ -94,7 +95,7 @@
      :END:
      I should probably think about the "language" the Agent and Server speak
      to each other.
-*** Agent [0/1]
+*** Agent [0/2]
     :PROPERTIES:
     :COOKIE_DATA: todo recursive
     :VISIBILITY: children
@@ -117,6 +118,16 @@
      :END:
      I want to be able to configure at runtime which Probes I run, at which
      intervals, etc.
+**** TODO Probes [0/0]
+     :PROPERTIES:
+     :COOKIE_DATA: todo recursive
+     :VISIBILITY: children
+     :END:
+     :LOGBOOK:
+     CLOCK: [2024-07-01 Mo 18:38]--[2024-07-01 Mo 20:48] =>  2:10
+     CLOCK: [2024-06-29 Sa 14:40]--[2024-06-29 Sa 15:38] =>  0:58
+     CLOCK: [2024-06-28 Fr 18:55]--[2024-06-28 Fr 21:47] =>  2:52
+     :END:
 ** Bugs [0/0]
    :PROPERTIES:
    :COOKIE_DATA: todo recursive
