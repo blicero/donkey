@@ -1,5 +1,5 @@
 # -*- mode: org; fill-column: 78; -*-
-# Time-stamp: <2024-07-01 20:49:02 krylon>
+# Time-stamp: <2024-07-03 23:24:44 krylon>
 #
 #+TAGS: optimize(o) refactor(r) bug(b) feature(f) architecture(a)
 #+TAGS: web(w) database(d) javascript(j)
@@ -12,21 +12,21 @@
   A simple-minded network monitoring application
 ** Clocktable
    #+BEGIN: clocktable :scope file :maxlevel 20
-   #+CAPTION: Clock summary at [2024-07-01 Mo 20:49]
-   | Headline                           | Time       |          |       |      |
-   |------------------------------------+------------+----------+-------+------|
-   | *Total time*                       | *1d 21:17* |          |       |      |
-   |------------------------------------+------------+----------+-------+------|
-   | Donkey                             | 1d 21:17   |          |       |      |
-   | \_  Components [0/1]               |            | 1d 21:17 |       |      |
-   | \_    Database [1/2]               |            |          |  8:39 |      |
-   | \_      JSON without the Argonauts |            |          |       | 0:30 |
-   | \_      Testing                    |            |          |       | 2:19 |
-   | \_    Server [0/0]                 |            |          | 14:36 |      |
-   | \_      Webservice [0/0]           |            |          |       | 8:27 |
-   | \_    Agent [0/2]                  |            |          | 22:02 |      |
-   | \_      Configuration              |            |          |       | 1:27 |
-   | \_      Probes [0/0]               |            |          |       | 6:00 |
+   #+CAPTION: Clock summary at [2024-07-03 Mi 23:24]
+   | Headline                           | Time       |          |          |         |
+   |------------------------------------+------------+----------+----------+---------|
+   | *Total time*                       | *2d 22:05* |          |          |         |
+   |------------------------------------+------------+----------+----------+---------|
+   | Donkey                             | 2d 22:05   |          |          |         |
+   | \_  Components [0/1]               |            | 2d 22:05 |          |         |
+   | \_    Database [1/2]               |            |          |     8:39 |         |
+   | \_      JSON without the Argonauts |            |          |          |    0:30 |
+   | \_      Testing                    |            |          |          |    2:19 |
+   | \_    Server [0/0]                 |            |          |    14:36 |         |
+   | \_      Webservice [0/0]           |            |          |          |    8:27 |
+   | \_    Agent [0/2]                  |            |          | 1d 22:50 |         |
+   | \_      Configuration              |            |          |          |    1:27 |
+   | \_      Probes [0/0]               |            |          |          | 1d 6:48 |
    #+END:
 ** Diary
 ** Features [0/0]
@@ -124,6 +124,7 @@
      :VISIBILITY: children
      :END:
      :LOGBOOK:
+     CLOCK: [2024-07-02 Di 19:36]--[2024-07-03 Mi 20:24] => 24:48
      CLOCK: [2024-07-01 Mo 18:38]--[2024-07-01 Mo 20:48] =>  2:10
      CLOCK: [2024-06-29 Sa 14:40]--[2024-06-29 Sa 15:38] =>  0:58
      CLOCK: [2024-06-28 Fr 18:55]--[2024-06-28 Fr 21:47] =>  2:52
