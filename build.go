@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 01. 02. 2021 by Benjamin Walkenhorst
 // (c) 2021 Benjamin Walkenhorst
-// Time-stamp: <2024-06-15 15:45:41 krylon>
+// Time-stamp: <2024-09-04 14:32:46 krylon>
 
 //go:build ignore
 // +build ignore
@@ -67,6 +67,7 @@ var candidates = map[string][]string{
 		"agent/platform",
 	},
 	"test": {
+		"common",
 		"agent",
 		"database",
 	},
