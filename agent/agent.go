@@ -2,7 +2,7 @@
 // -*- mode: go; coding: utf-8; -*-
 // Created on 11. 06. 2024 by Benjamin Walkenhorst
 // (c) 2024 Benjamin Walkenhorst
-// Time-stamp: <2024-07-01 19:37:44 krylon>
+// Time-stamp: <2024-07-03 19:51:22 krylon>
 
 // Package agent implements the client side of the application.
 package agent
@@ -73,7 +73,7 @@ func Create(srv string) (*Agent, error) {
 		ag.log.Printf("[ERROR] Failed to ask OS for hostname: %s\n",
 			err.Error())
 		return nil, err
-	} else if err = ag.readConfig(); err != nil {
+	} else if err = ag.readConfig(common.AgentConfPath); err != nil {
 		ag.log.Printf("[ERROR] Could not process configuration file: %s\n",
 			err.Error())
 		return nil, err
@@ -103,11 +103,11 @@ func (ag *Agent) readConfig(path string) error {
 	if fh, err = os.Open(path); err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
 			ag.log.Printf("[INFO] Agent configuration file %s does not exist.\n",
-				common.AgentConfPath)
+				path)
 			return nil
 		}
 		ag.log.Printf("[ERROR] Cannot open agent config %s: %s\n",
-			common.AgentConfPath,
+			path,
 			err.Error())
 		return err
 	}
@@ -116,7 +116,7 @@ func (ag *Agent) readConfig(path string) error {
 
 	if _, err = io.Copy(&buf, fh); err != nil {
 		ag.log.Printf("[ERROR] Failed to read from %s: %s\n",
-			common.AgentConfPath,
+			path,
 			err.Error())
 		return err
 	} else if err = json.Unmarshal(buf.Bytes(), &cfg); err != nil {
@@ -130,14 +130,33 @@ func (ag *Agent) readConfig(path string) error {
 	ag.server = cfg.Server
 
 	if cfg.Probes != nil {
-		for key, interval := range cfg.Probes {
+		for key := range cfg.Probes {
+			var (
+				err error
+				p   Probe
+			)
+
 			switch key {
 			case "load":
-				var p Probe = &LoadProbe{}
-				go ag.runProbe(p, interval)
+				if p, err = CreateLoadProbe(ag.recordq); err != nil {
+					ag.log.Printf("[ERROR] Failed to create LoadProbe: %s\n",
+						err.Error())
+					continue
+				}
+			case "sensors":
+				if p, err = CreateSensorsProbe(ag.recordq); err != nil {
+					ag.log.Printf("[ERROR] Failed to create SensorsProbe: %s\n",
+						err.Error())
+					continue
+				}
 			default:
 				ag.log.Printf("[ERROR] Don't know anything about probe type %q\n",
 					key)
+				continue
+			}
+
+			if p != nil {
+				go p.Run()
 			}
 		}
 	}
@@ -369,21 +388,21 @@ func (ag *Agent) reportRecord(rec *model.Record) error {
 	return nil
 } // func (ag *Agent) reportRecord(rec *model.Record) error
 
-func (ag *Agent) runProbe(p Probe, interval int) {
-	var ticker = time.NewTicker(time.Second * time.Duration(interval))
-	defer ticker.Stop()
+// func (ag *Agent) runProbe(p Probe, interval int) {
+// 	var ticker = time.NewTicker(time.Second * time.Duration(interval))
+// 	defer ticker.Stop()
 
-	var (
-		err error
-		rec *model.Record
-	)
+// 	var (
+// 		err error
+// 		rec *model.Record
+// 	)
 
-	for ag.active.Load() {
-		<-ticker.C
-		if rec, err = p.Collect(); err != nil {
-			ag.log.Printf("[ERROR] Failed to get Record from Probe: %s\n",
-				err.Error())
-		}
-		ag.recordq <- *rec
-	}
-} // func (ag *Agent) runProbe(p Probe)
+// 	for ag.active.Load() {
+// 		<-ticker.C
+// 		if rec, err = p.Collect(); err != nil {
+// 			ag.log.Printf("[ERROR] Failed to get Record from Probe: %s\n",
+// 				err.Error())
+// 		}
+// 		ag.recordq <- *rec
+// 	}
+// } // func (ag *Agent) runProbe(p Probe)
